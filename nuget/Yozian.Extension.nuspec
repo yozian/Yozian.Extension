@@ -9,12 +9,13 @@
     <projectUrl>https://github.com/yozian/Yozian.Extension</projectUrl>
     <iconUrl>https://no_icon_url_here</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Usefull extension method for primitive objects and interfaces</description>
+    <description>Useful extension methods for primitive objects and interfaces</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright Ⓒ yozian 2019</copyright>
     <tags>lib</tags>
     <dependencies>
-      <dependency id="NETStandard.Library" version="2.0" />
+      <group targetFramework=".NETStandard2.0" />
     </dependencies>
+    <repository commit="" ></repository>
   </metadata>
 </package>

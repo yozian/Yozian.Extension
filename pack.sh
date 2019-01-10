@@ -6,8 +6,20 @@ if [ "$version" == "" ];then
    exit;
 fi
 
+commit=`git rev-parse --short HEAD`
+
+echo "pack with commit: $commit"
+
+# change commit hash
+sed -i -e "s/commit=\"*\"/commit=\"$commit\"/g" nuget/Yozian.Extension.nuspec
+
 cd nuget
 
 nuget pack -version $1
 
 cd ..
+
+
+# recover
+git checkout nuget/Yozian.Extension.nuspec
+
