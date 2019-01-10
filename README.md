@@ -1,17 +1,58 @@
 # Useful Extension methods
 
-Currently  wiki is under working, you could take a look into test project to get examples.
+You could take a look into test project to get examples with following list!
 
-# Type Decorated
+# Extension methods of Type
 
-* Exception
-* Expression
-* ICollection
-* IDicationary
-* IEnumerable
-* IQueryable
-* Object
-* String
+* [ExceptionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ExceptionExtensionTest.cs)
+
+    >DumpDetail
+
+* [ExpressionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ExpressionExtensionTest.cs)
+
+    >GetMemberName
+
+* [ICollectionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ICollectionExtensionTest.cs)
+
+    >AddWhen
+
+    >RemoveWhen
+
+* [IDictionaryExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IDictionaryExtensionTest.cs)
+
+    >SafeGet
+
+* [IEnumerableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IEnumerableExtensionTest.cs)
+
+    >ForEach
+
+    >FlattenToString
+
+    >DistinctBy
+
+    >ForEachPage
+
+    >ToPagination
+
+* [IQueryableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IQueryableExtensionTest.cs)
+
+    >WhereWhen
+
+* [ObjectExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ObjectExtensionTest.cs)
+
+    >SafeToString
+
+    >ConvertAll
+
+    >ShallowClone
+
+* [StringExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//StringExtensionTest.cs)
+
+    >ToEnum
+
+    >LimitLength
+
+    >Repeate
 
 # Take IQueryable Extension method as example
 
