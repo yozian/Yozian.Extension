@@ -16,6 +16,6 @@
     <dependencies>
       <group targetFramework=".NETStandard2.0" />
     </dependencies>
-    <repository commit="" ></repository>
+    <repository type="git" commit="" url="https://github.com/yozian/Yozian.Extension"></repository>
   </metadata>
 </package>
