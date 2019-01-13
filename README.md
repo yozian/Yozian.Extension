@@ -30,9 +30,6 @@ You could take a look into test project to get examples with following list!
 
     >DistinctBy
 
-    >ForEachPage
-
-    >ToPagination
 
 * [IQueryableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IQueryableExtensionTest.cs)
 
@@ -53,6 +50,12 @@ You could take a look into test project to get examples with following list!
     >LimitLength
 
     >Repeate
+
+* [PaginationExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//PaginationExtensionTest.cs)
+
+    >ToPagination
+
+    >ToPaginationAsync
 
 # Take IQueryable Extension method as example
 
