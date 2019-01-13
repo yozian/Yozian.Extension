@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yozian.Extension.Pagination;
 
 namespace Yozian.Extension
 {
@@ -69,14 +70,15 @@ namespace Yozian.Extension
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="this"></param>
-        /// <param name="limits"></param>
+        /// <param name="size"></param>
         /// <param name="processor"></param>
+        [Obsolete("You should use ToPagination in IQueryable(such call AsQueryable() method), This method will be removed for the next version.")]
         public static void ForEachPage<T>(
               this IEnumerable<T> @this,
-              int limits,
+              int size,
               Action<IEnumerable<T>, int> processor)
         {
-            var pagination = @this.ToPagination(limits);
+            var pagination = @this.ToPagination(size);
 
             pagination.Pages.ForEach((page, index) =>
             {
@@ -86,6 +88,7 @@ namespace Yozian.Extension
 
         }
 
+        [Obsolete("You should use ToPagination in IQueryable(such call AsQueryable() method), This method will be removed for the next version.")]
         public static Pagination<T> ToPagination<T>(
               this IEnumerable<T> @this,
               int limits
