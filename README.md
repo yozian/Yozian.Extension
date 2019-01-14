@@ -105,5 +105,70 @@ var books = await query.ToListAsync();
 ```
 
 
+### IQueryable Pagination
+
+ * An Extension method for IQueryable<T> interface
+ * Could apply on EntityFramework DbSet<T> query (Any implementation of IQueryable<T>)
+
+```csharp
+
+        var count = 10;
+        var size = 3;
+        var source = Enumerable
+            .Range(1, count)
+            .AsQueryable();
+
+        Pageable<int> result = source.ToPagination(1, size);
+
+        // Async 
+        Pageable<int> result = await source.ToPaginationAsync(1, size);
+```
+
+
+Apply converter 
+
+```csharp
+
+        var count = 10;
+        var size = 3;
+        var source = Enumerable
+            .Range(1, count)
+            .AsQueryable();
+
+        Pageable<int, string> result = source.ToPagination(1, size, x => x.ToString());
+
+        // Async 
+        Pageable<int, string> result = await source.ToPaginationAsync(1, size, x => x.ToString());
+```
+
+
+Fetch next page for the same queryable source
+
+```csharp
+
+        var count = 10;
+        var size = 3;
+        var source = Enumerable
+            .Range(1, count)
+            .AsQueryable();
+
+        Pageable<int, string> result = source.ToPagination(1, size, x => x.ToString());
+
+        do
+        {
+            // process records here
+            result.Records.ForEach(it =>
+            {
+                // do somthing
+
+            });
+
+            result.FetchNextPage();
+
+        }
+        while (result.HasNextPage);
+      
+```
+
 ### feel free for pull request
 
