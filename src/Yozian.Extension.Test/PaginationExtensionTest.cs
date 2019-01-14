@@ -129,6 +129,13 @@ namespace Yozian.Extension.Test
             {
                 result.FetchNextPage();
 
+                // process records here
+                result.Records.ForEach(it =>
+                {
+                    // do somthing
+
+                });
+
                 fetchCount++;
             }
 
@@ -153,6 +160,13 @@ namespace Yozian.Extension.Test
             while (result.HasNextPage)
             {
                 await result.FetchNextPageAsync();
+
+                // process records here
+                result.Records.ForEach(it =>
+                {
+                    // do somthing
+
+                });
 
                 fetchCount++;
             }

@@ -36,7 +36,7 @@ namespace Yozian.Extension.Pagination.Models
         }
 
 
-        public Pageable<TSource, TOutput> FetchNextPage()
+        public void FetchNextPage()
         {
             var nextPage = this.Page + 1;
             if (nextPage > this.PageCount)
@@ -45,10 +45,9 @@ namespace Yozian.Extension.Pagination.Models
             }
 
             this.fetchPage(nextPage, this.Size);
-            return this;
         }
 
-        public Task<Pageable<TSource, TOutput>> FetchNextPageAsync()
+        public Task FetchNextPageAsync()
         {
             return Task.Run(() => this.FetchNextPage());
         }
@@ -121,7 +120,7 @@ namespace Yozian.Extension.Pagination.Models
         {
         }
 
-        public new Pageable<T> FetchNextPage()
+        public new void FetchNextPage()
         {
             var nextPage = this.Page + 1;
             if (nextPage > this.PageCount)
@@ -130,10 +129,9 @@ namespace Yozian.Extension.Pagination.Models
             }
 
             this.fetchPage(nextPage, this.Size);
-            return this;
         }
 
-        public new Task<Pageable<T>> FetchNextPageAsync()
+        public new Task FetchNextPageAsync()
         {
             return Task.Run(() => this.FetchNextPage());
         }
