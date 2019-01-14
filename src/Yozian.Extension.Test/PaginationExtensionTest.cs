@@ -79,15 +79,16 @@ namespace Yozian.Extension.Test
             var result = source.ToPagination(1, size);
             var fetchCount = 1;
             var startValue = result.Records.First();
-            while (result.HasNextPage)
+            do
             {
-                result.FetchNextPage();
                 // the first value in the next page should be 
-                Assert.AreEqual(startValue + size, result.Records.First());
-                startValue += size;
-                fetchCount++;
+                Assert.AreEqual(startValue + (size * (fetchCount - 1)), result.Records.First());
 
+                result.FetchNextPage();
+
+                fetchCount++;
             }
+            while (result.HasNextPage);
 
             Assert.AreEqual(fetchCount, result.PageCount);
 
@@ -124,11 +125,8 @@ namespace Yozian.Extension.Test
 
             var result = db.Books.ToPagination(1, size);
 
-
-            while (result.HasNextPage)
+            do
             {
-                result.FetchNextPage();
-
                 // process records here
                 result.Records.ForEach(it =>
                 {
@@ -136,8 +134,14 @@ namespace Yozian.Extension.Test
 
                 });
 
+                result.FetchNextPage();
+
+
+
                 fetchCount++;
             }
+            while (result.HasNextPage);
+
 
             Assert.AreEqual(10, result.Records.Last().Id);
 
@@ -156,11 +160,8 @@ namespace Yozian.Extension.Test
 
             var result = await db.Books.ToPaginationAsync(1, size);
 
-
-            while (result.HasNextPage)
+            do
             {
-                await result.FetchNextPageAsync();
-
                 // process records here
                 result.Records.ForEach(it =>
                 {
@@ -168,8 +169,11 @@ namespace Yozian.Extension.Test
 
                 });
 
+                await result.FetchNextPageAsync();
+
                 fetchCount++;
-            }
+            } while (result.HasNextPage);
+
 
             Assert.AreEqual(10, result.Records.Last().Id);
 
