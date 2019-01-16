@@ -12,7 +12,7 @@
     <description>Useful extension methods for primitive objects and interfaces</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright Ⓒ yozian 2019</copyright>
-    <tags>lib</tags>
+    <tags>lib, pagable, pagination, page navigation</tags>
     <dependencies>
       <group targetFramework=".NETStandard2.0" />
     </dependencies>
