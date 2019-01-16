@@ -170,5 +170,53 @@ Fetch next page for the same queryable source
       
 ```
 
-### feel free for pull request
+
+Fetch next page for the same queryable source
+
+```csharp
+
+        var count = 32;
+        var size = 3;
+        var source = Enumerable
+            .Range(1, count)
+            .AsQueryable();
+        var currentPage = 3;
+
+        var result = source.ToPagination(currentPage, size);
+
+        var pageSize = 5;
+
+        // converte to Page<T>, including navigation info.
+        Page<int> page = result.ToPage(pageSize);
+    
+        // also provide tranform method to map records
+        Page<string> page = result.ToPage(pageSize, x => x.ToString());
+
+
+        // dump Page<int> 
+        {
+          "TotalCount": 32,
+          "PageCount": 11,
+          "CurrentPage": 3,
+          "Size": 3,
+          "Records": [
+            7,
+            8,
+            9
+          ],
+          "PageSize": 5,
+          "HasPreviosPages": false,
+          "HasNextPages": true,
+          "PreviosLastPageNo": 1,
+          "NextStartPageNo": 6,
+          "NavigationPages": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }      
+```
+
 

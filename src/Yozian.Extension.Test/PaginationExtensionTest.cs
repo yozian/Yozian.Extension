@@ -68,6 +68,8 @@ namespace Yozian.Extension.Test
 
             Page<int> page = result.ToPage(pageSize);
 
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(page));
+
             Assert.AreEqual(count, page.TotalCount);
             Assert.AreEqual(size, page.Records.Count());
             Assert.AreEqual(currentPage, page.CurrentPage);
