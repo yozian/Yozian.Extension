@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Yozian.Extension.Pagination;
+using Yozian.Extension.Pagination.Models;
 using Yozian.Extension.Test.Data;
 using Yozian.Extension.Test.Data.Entities;
 
@@ -43,10 +44,174 @@ namespace Yozian.Extension.Test
 
             Assert.AreEqual(count, result.TotalCount);
             Assert.AreEqual(size, result.Records.Count());
-            Assert.AreEqual(1, result.Page);
+            Assert.AreEqual(1, result.CurrentPage);
             Assert.AreEqual(4, result.PageCount);
 
         }
+
+
+        [TestCase(1)]
+        [TestCase(3)]
+        [TestCase(5)]
+        public void Test_Pagination_ToPageStart(int currentPage)
+        {
+            var count = 32;
+            var size = 3;
+            var source = Enumerable
+                .Range(1, count)
+                .AsQueryable();
+
+            var result = source.ToPagination(currentPage, size);
+
+
+            var pageSize = 5;
+
+            Page<int> page = result.ToPage(pageSize);
+
+            Assert.AreEqual(count, page.TotalCount);
+            Assert.AreEqual(size, page.Records.Count());
+            Assert.AreEqual(currentPage, page.CurrentPage);
+
+
+            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+
+            var currentSize = currentPage == 11 ? count % size : size;
+            Assert.AreEqual(currentSize, page.Records.Count());
+
+            //
+            Assert.AreEqual(5, page.PageSize);
+
+            // 
+            Assert.AreEqual(false, page.HasPreviosPages);
+            Assert.AreEqual(1, page.PreviosLastPageNo);
+
+            //
+            Assert.AreEqual(true, page.HasNextPages);
+            Assert.AreEqual(6, page.NextStartPageNo);
+
+        }
+
+
+        [TestCase(6)]
+        [TestCase(9)]
+        [TestCase(10)]
+        public void Test_Pagination_ToPageMiddle(int currentPage)
+        {
+            var count = 32;
+            var size = 3;
+            var source = Enumerable
+                .Range(1, count)
+                .AsQueryable();
+
+            var result = source.ToPagination(currentPage, size);
+
+
+            var pageSize = 5;
+
+            Page<int> page = result.ToPage(pageSize);
+
+            Assert.AreEqual(count, page.TotalCount);
+            Assert.AreEqual(size, page.Records.Count());
+            Assert.AreEqual(currentPage, page.CurrentPage);
+
+
+            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+
+            var currentSize = currentPage == 11 ? count % size : size;
+            Assert.AreEqual(currentSize, page.Records.Count());
+
+            //
+            Assert.AreEqual(5, page.PageSize);
+
+            // 
+            Assert.AreEqual(true, page.HasPreviosPages);
+            Assert.AreEqual(5, page.PreviosLastPageNo);
+
+            //
+            Assert.AreEqual(true, page.HasNextPages);
+            Assert.AreEqual(11, page.NextStartPageNo);
+
+        }
+
+        [TestCase(11)]
+        public void Test_Pagination_ToPageEnd(int currentPage)
+        {
+            var count = 32;
+            var size = 3;
+            var source = Enumerable
+                .Range(1, count)
+                .AsQueryable();
+
+            var result = source.ToPagination(currentPage, size);
+
+
+            var pageSize = 5;
+
+            Page<int> page = result.ToPage(pageSize);
+
+            Assert.AreEqual(count, page.TotalCount);
+            Assert.AreEqual(count % size, page.Records.Count());
+            Assert.AreEqual(currentPage, page.CurrentPage);
+
+
+            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+
+            var currentSize = currentPage == 11 ? count % size : size;
+            Assert.AreEqual(currentSize, page.Records.Count());
+
+            //
+            Assert.AreEqual(5, page.PageSize);
+
+            // 
+            Assert.AreEqual(true, page.HasPreviosPages);
+            Assert.AreEqual(10, page.PreviosLastPageNo);
+
+            //
+            Assert.AreEqual(false, page.HasNextPages);
+            Assert.AreEqual(11, page.NextStartPageNo);
+
+        }
+
+        [TestCase(11)]
+        public void Test_Pagination_ToPageWithConverter(int currentPage)
+        {
+            var count = 32;
+            var size = 3;
+            var source = Enumerable
+                .Range(1, count)
+                .AsQueryable();
+
+            var result = source.ToPagination(currentPage, size);
+
+
+            var pageSize = 5;
+
+            Page<string> page = result.ToPage(pageSize, x => x.ToString());
+
+
+            Assert.AreEqual(count, page.TotalCount);
+            Assert.AreEqual(count % size, page.Records.Count());
+            Assert.AreEqual(currentPage, page.CurrentPage);
+
+
+            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+
+            var currentSize = currentPage == 11 ? count % size : size;
+            Assert.AreEqual(currentSize, page.Records.Count());
+
+            //
+            Assert.AreEqual(5, page.PageSize);
+
+            // 
+            Assert.AreEqual(true, page.HasPreviosPages);
+            Assert.AreEqual(10, page.PreviosLastPageNo);
+
+            //
+            Assert.AreEqual(false, page.HasNextPages);
+            Assert.AreEqual(11, page.NextStartPageNo);
+
+        }
+
 
         [TestCase()]
         public void Test_PaginationWithConverter()
@@ -62,7 +227,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(count, result.TotalCount);
             Assert.AreEqual(size, result.Records.Count());
             Assert.AreEqual(typeof(string), result.Records.First().GetType());
-            Assert.AreEqual(1, result.Page);
+            Assert.AreEqual(1, result.CurrentPage);
             Assert.AreEqual(4, result.PageCount);
 
         }
@@ -108,7 +273,7 @@ namespace Yozian.Extension.Test
 
             Assert.AreEqual(count, result.TotalCount);
             Assert.AreEqual(size, result.Records.Count());
-            Assert.AreEqual(1, result.Page);
+            Assert.AreEqual(1, result.CurrentPage);
             Assert.AreEqual(4, result.PageCount);
 
         }
