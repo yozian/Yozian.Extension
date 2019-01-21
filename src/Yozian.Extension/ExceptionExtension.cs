@@ -41,8 +41,8 @@ namespace Yozian.Extension
                 .Reverse()
                 .ForEach(info =>
                 {
-                    sb.AppendLine($"class:{info.Class.FullName}");
-                    sb.AppendLine($"method:{info.Method}");
+                    sb.AppendLine($"class:{info.Class?.FullName}");
+                    sb.AppendLine($"method:{info.Method?.Name}");
 
                     // only print for our source
                     if (!string.IsNullOrEmpty(info.FileName))
