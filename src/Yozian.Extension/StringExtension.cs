@@ -47,5 +47,23 @@ namespace Yozian.Extension
         {
             return string.Join(seperator, Enumerable.Repeat(@this, count));
         }
+
+        public static string EncodeToBase64(this string @this)
+        {
+            if (string.IsNullOrEmpty(@this))
+            {
+                return string.Empty;
+            }
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(@this));
+        }
+
+        public static string DecodeBase64Text(this string @this)
+        {
+            if (string.IsNullOrEmpty(@this))
+            {
+                return string.Empty;
+            }
+            return Encoding.UTF8.GetString(Convert.FromBase64String(@this));
+        }
     }
 }
