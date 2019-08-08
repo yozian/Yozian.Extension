@@ -51,7 +51,7 @@ namespace Yozian.Extension
         {
             if (string.IsNullOrEmpty(@this))
             {
-                return string.Empty;
+                return @this;
             }
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(@this));
         }
@@ -60,7 +60,7 @@ namespace Yozian.Extension
         {
             if (string.IsNullOrEmpty(@this))
             {
-                return string.Empty;
+                return @this;
             }
             return Encoding.UTF8.GetString(Convert.FromBase64String(@this));
         }
