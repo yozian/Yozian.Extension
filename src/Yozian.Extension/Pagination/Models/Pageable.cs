@@ -9,7 +9,6 @@ namespace Yozian.Extension.Pagination.Models
 {
     public class Pageable<TSource, TOutput>
     {
-
         protected IQueryable<TSource> source;
 
         protected Func<TSource, TOutput> converter;
@@ -28,7 +27,6 @@ namespace Yozian.Extension.Pagination.Models
             }
             internal set
             {
-
             }
         }
 
@@ -47,7 +45,6 @@ namespace Yozian.Extension.Pagination.Models
             }
             private set { }
         }
-
 
         public void FetchNextPage()
         {
@@ -88,7 +85,6 @@ namespace Yozian.Extension.Pagination.Models
                     .Select(converter)
                     .ToList();
             }
-
         }
 
         public Page<T> ToPage<T>(int pageSize, Func<TOutput, T> converter)
@@ -127,7 +123,6 @@ namespace Yozian.Extension.Pagination.Models
                 );
         }
 
-
         internal Pageable(
             IQueryable<TSource> source,
             int? page,
@@ -154,7 +149,6 @@ namespace Yozian.Extension.Pagination.Models
             var remainder = totalCount % limits;
             return (totalCount / limits) + (remainder.Equals(0) ? 0 : 1);
         }
-
     }
 
     public class Pageable<T> : Pageable<T, T>
@@ -184,12 +178,5 @@ namespace Yozian.Extension.Pagination.Models
         {
             return Task.Run(() => this.FetchNextPage());
         }
-
-
     }
-
-
-   
-
-
 }

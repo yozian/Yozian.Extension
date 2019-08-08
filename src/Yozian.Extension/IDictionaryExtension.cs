@@ -21,6 +21,5 @@ namespace Yozian.Extension
                 return default(TValue);
             }
         }
-
     }
 }

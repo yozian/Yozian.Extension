@@ -17,7 +17,6 @@ namespace Yozian.Extension.Pagination.Models
         /// </summary>
         public int PageCount { get; private set; }
 
-
         /// <summary>
         /// current page number of pages
         /// </summary>
@@ -33,8 +32,8 @@ namespace Yozian.Extension.Pagination.Models
         /// </summary>
         public IEnumerable<T> Records { get; private set; }
 
-
         #region navigation
+
         /// <summary>
         /// page navigation size
         /// </summary>
@@ -42,7 +41,7 @@ namespace Yozian.Extension.Pagination.Models
 
         /// <summary>
         /// indicate that has previous pages of the navigation
-        /// 
+        ///
         /// ex :   <<  6,7,8,9,10 >>  -> there are << 1,2,3,4,5 >>
         /// </summary>
         public bool HasPreviosPages { get; private set; }
@@ -53,25 +52,21 @@ namespace Yozian.Extension.Pagination.Models
         /// </summary>
         public bool HasNextPages { get; private set; }
 
-
         /// <summary>
-        /// 
+        ///
         /// ex: current navigation <<  6,7,8,9,10 >>,  -> will be [1]
         /// </summary>
         public int PreviosLastPageNo { get; private set; }
 
         /// <summary>
-        /// 
+        ///
         /// ex: current navigation <<  6,7,8,9,10 >>,  -> will be [11] (if has more pages)
         /// </summary>
         public int NextStartPageNo { get; private set; }
 
-
         public IEnumerable<int> NavigationPages { get; private set; }
 
-        #endregion
-
-
+        #endregion navigation
 
         public Page(
             IEnumerable<T> records,
@@ -91,9 +86,7 @@ namespace Yozian.Extension.Pagination.Models
 
             //
             this.calculatenavigation(totalCount, pageCount, currentPage, pageSize);
-
         }
-
 
         private void calculatenavigation(int totalCount, int pageCount, int currentPage, int pageSize)
         {
@@ -116,8 +109,6 @@ namespace Yozian.Extension.Pagination.Models
             this.NextStartPageNo = Math.Min(maxPage + 1, pageCount);
             this.HasPreviosPages = minPage > pageSize;
             this.HasNextPages = pageCount > maxPage;
-
         }
-
     }
 }
