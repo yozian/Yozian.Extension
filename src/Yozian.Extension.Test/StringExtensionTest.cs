@@ -72,6 +72,19 @@ namespace Yozian.Extension.Test
         }
 
 
+        [TestCase("test1")]
+        [TestCase("1234")]
+        [TestCase("!@#$")]
+        public void Test_Base64EncodeAndDecode(string text)
+        {
+            var encodedText = text.EncodeToBase64();
+
+            var decodedText = encodedText.DecodeBase64Text();
+
+            Assert.AreEqual(text, decodedText);
+        }
+
+
     }
 
 

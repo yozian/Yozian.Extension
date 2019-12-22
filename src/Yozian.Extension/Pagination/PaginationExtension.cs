@@ -9,7 +9,6 @@ namespace Yozian.Extension.Pagination
 {
     public static class PaginationExtension
     {
-
         public static Pageable<TSource, TOutput> ToPagination<TSource, TOutput>(
             this IQueryable<TSource> @this,
             int? page,
@@ -20,17 +19,14 @@ namespace Yozian.Extension.Pagination
             return new Pageable<TSource, TOutput>(@this, page, size, converter);
         }
 
-
         public static Pageable<T> ToPagination<T>(
            this IQueryable<T> @this,
            int? page,
            int? size
            )
         {
-
             return new Pageable<T>(@this, page, size, t => t);
         }
-
 
         public static Task<Pageable<TSource, TOutput>> ToPaginationAsync<TSource, TOutput>(
                    this IQueryable<TSource> @this,
@@ -50,10 +46,5 @@ namespace Yozian.Extension.Pagination
         {
             return Task.Run(() => ToPagination(@this, page, size));
         }
-
-
-
-
     }
 }
-

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +45,24 @@ namespace Yozian.Extension
             )
         {
             return string.Join(seperator, Enumerable.Repeat(@this, count));
+        }
+
+        public static string EncodeToBase64(this string @this)
+        {
+            if (string.IsNullOrEmpty(@this))
+            {
+                return @this;
+            }
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(@this));
+        }
+
+        public static string DecodeBase64Text(this string @this)
+        {
+            if (string.IsNullOrEmpty(@this))
+            {
+                return @this;
+            }
+            return Encoding.UTF8.GetString(Convert.FromBase64String(@this));
         }
     }
 }

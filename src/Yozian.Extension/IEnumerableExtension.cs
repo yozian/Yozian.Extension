@@ -43,7 +43,6 @@ namespace Yozian.Extension
             return string.Join(seperator, @this.Select(x => x.ToString()));
         }
 
-
         public static string FlattenToString<T>(this IEnumerable<T> @this, Func<T, string> converter, string seperator = "")
         {
             return string.Join(seperator, @this.Select(converter));
@@ -85,7 +84,6 @@ namespace Yozian.Extension
                 // page start from 1
                 processor(page, index + 1);
             });
-
         }
 
         [Obsolete("You should use ToPagination in IQueryable(such call AsQueryable() method), This method will be removed for the next version.")]
@@ -142,7 +140,6 @@ namespace Yozian.Extension
             return pagination;
         }
 
-
         public class Pagination<T>
         {
             public int PageCount { get; set; }
@@ -151,10 +148,7 @@ namespace Yozian.Extension
 
             internal Pagination()
             {
-
             }
         }
-
     }
-
 }

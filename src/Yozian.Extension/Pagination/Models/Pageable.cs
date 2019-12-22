@@ -9,7 +9,6 @@ namespace Yozian.Extension.Pagination.Models
 {
     public class Pageable<TSource, TOutput>
     {
-
         protected IQueryable<TSource> source;
 
         protected Func<TSource, TOutput> converter;
@@ -17,7 +16,19 @@ namespace Yozian.Extension.Pagination.Models
         public int TotalCount { get; internal set; }
         public int PageCount { get; internal set; }
 
-        public int Page { get; internal set; }
+        public int CurrentPage { get; internal set; }
+
+        [Obsolete("Please use [CurrentPage] instead.")]
+        public int Page
+        {
+            get
+            {
+                return this.CurrentPage;
+            }
+            internal set
+            {
+            }
+        }
 
         /// <summary>
         /// Maximum
@@ -30,15 +41,14 @@ namespace Yozian.Extension.Pagination.Models
         {
             get
             {
-                return this.Page < PageCount;
+                return this.CurrentPage < PageCount;
             }
             private set { }
         }
 
-
         public void FetchNextPage()
         {
-            var nextPage = this.Page + 1;
+            var nextPage = this.CurrentPage + 1;
             if (nextPage > this.PageCount)
             {
                 throw new Exception($"Source Exceeds max page {this.PageCount}");
@@ -56,28 +66,62 @@ namespace Yozian.Extension.Pagination.Models
         {
             this.TotalCount = source.Count();
             this.PageCount = calculatePageCount(size, this.TotalCount);
-            this.Page = page >= this.PageCount ? this.PageCount : page;
-            this.Page = this.Page < 1 ? 1 : this.Page;
+            this.CurrentPage = page >= this.PageCount ? this.PageCount : page;
+            this.CurrentPage = this.CurrentPage < 1 ? 1 : this.CurrentPage;
             this.Size = size;
 
             if (null != this.converter)
             {
                 this.Records = this.source
                     .Select(converter)
-                    .Skip((this.Page - 1) * this.Size)
+                    .Skip((this.CurrentPage - 1) * this.Size)
                     .Take(this.Size)
                     .ToList();
             }
             else
             {
-                this.Records = this.source.Skip((this.Page - 1) * this.Size)
+                this.Records = this.source.Skip((this.CurrentPage - 1) * this.Size)
                     .Take(this.Size)
                     .Select(converter)
                     .ToList();
             }
-
         }
 
+        public Page<T> ToPage<T>(int pageSize, Func<TOutput, T> converter)
+        {
+            if (1 > pageSize)
+            {
+                throw new ArgumentException($"pageSize should be greater than 0");
+            }
+
+            var data = this.Records.Select(converter).AsEnumerable();
+
+            return new Page<T>(
+                    data,
+                    this.TotalCount,
+                    this.PageCount,
+                    this.CurrentPage,
+                    this.Size,
+                    pageSize
+                );
+        }
+
+        public Page<TOutput> ToPage(int pageSize)
+        {
+            if (1 > pageSize)
+            {
+                throw new ArgumentException($"pageSize should be greater than 0");
+            }
+
+            return new Page<TOutput>(
+                    this.Records,
+                    this.TotalCount,
+                    this.PageCount,
+                    this.CurrentPage,
+                    this.Size,
+                    pageSize
+                );
+        }
 
         internal Pageable(
             IQueryable<TSource> source,
@@ -89,10 +133,10 @@ namespace Yozian.Extension.Pagination.Models
             this.source = source;
             this.converter = converter;
 
-            this.Page = page ?? 1;
+            this.CurrentPage = page ?? 1;
             this.Size = size ?? 10;
 
-            this.fetchPage(this.Page, this.Size);
+            this.fetchPage(this.CurrentPage, this.Size);
         }
 
         private static int calculatePageCount(int limits, int totalCount)
@@ -105,7 +149,6 @@ namespace Yozian.Extension.Pagination.Models
             var remainder = totalCount % limits;
             return (totalCount / limits) + (remainder.Equals(0) ? 0 : 1);
         }
-
     }
 
     public class Pageable<T> : Pageable<T, T>
@@ -122,7 +165,7 @@ namespace Yozian.Extension.Pagination.Models
 
         public new void FetchNextPage()
         {
-            var nextPage = this.Page + 1;
+            var nextPage = this.CurrentPage + 1;
             if (nextPage > this.PageCount)
             {
                 throw new Exception($"Source Exceeds max page {this.PageCount}");
@@ -135,9 +178,5 @@ namespace Yozian.Extension.Pagination.Models
         {
             return Task.Run(() => this.FetchNextPage());
         }
-
-
     }
-
-
 }
