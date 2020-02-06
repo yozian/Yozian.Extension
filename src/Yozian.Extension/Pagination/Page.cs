@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Yozian.Extension.Pagination.Models
+namespace Yozian.Extension.Pagination
 {
     public class Page<T>
     {
@@ -44,7 +44,7 @@ namespace Yozian.Extension.Pagination.Models
         ///
         /// ex :   <<  6,7,8,9,10 >>  -> there are << 1,2,3,4,5 >>
         /// </summary>
-        public bool HasPreviosPages { get; private set; }
+        public bool HasPreviousPages { get; private set; }
 
         /// <summary>
         /// indicate that has more page numbers in the next of the navigation
@@ -56,7 +56,7 @@ namespace Yozian.Extension.Pagination.Models
         ///
         /// ex: current navigation <<  6,7,8,9,10 >>,  -> will be [1]
         /// </summary>
-        public int PreviosLastPageNo { get; private set; }
+        public int PreviousLastPageNo { get; private set; }
 
         /// <summary>
         ///
@@ -75,7 +75,7 @@ namespace Yozian.Extension.Pagination.Models
             int currentPage,
             int size,
             int pageSize
-            )
+        )
         {
             this.TotalCount = totalCount;
             this.PageCount = pageCount;
@@ -85,29 +85,30 @@ namespace Yozian.Extension.Pagination.Models
             this.Records = records;
 
             //
-            this.calculatenavigation(totalCount, pageCount, currentPage, pageSize);
+            this.calculateNavigation(totalCount, pageCount, currentPage, pageSize);
         }
 
-        private void calculatenavigation(int totalCount, int pageCount, int currentPage, int pageSize)
+        private void calculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
         {
             var isTimesOfDisplayPagesCount = (currentPage % pageSize) == 0;
 
-            var startIndex = isTimesOfDisplayPagesCount ? ((currentPage / pageSize) - 1) * pageSize + 1
+            var startIndex = isTimesOfDisplayPagesCount
+                ? ((currentPage / pageSize) - 1) * pageSize + 1
                 : (currentPage / pageSize) * pageSize + 1;
 
             var navigationPages = Enumerable
-                        .Range(startIndex, pageSize)
-                        .Where(p => p <= pageCount)
-                        .AsEnumerable();
+               .Range(startIndex, pageSize)
+               .Where(p => p <= pageCount)
+               .ToList();
 
-            var minPage = navigationPages.Count() > 0 ? navigationPages.First() : 1;
-            var maxPage = navigationPages.Count() > 0 ? navigationPages.Last() : 1;
+            var minPage = navigationPages.Any() ? navigationPages.First() : 1;
+            var maxPage = navigationPages.Any() ? navigationPages.Last() : 1;
 
             // binding
             this.NavigationPages = navigationPages;
-            this.PreviosLastPageNo = Math.Max(minPage - 1, 1);
+            this.PreviousLastPageNo = Math.Max(minPage - 1, 1);
             this.NextStartPageNo = Math.Min(maxPage + 1, pageCount);
-            this.HasPreviosPages = minPage > pageSize;
+            this.HasPreviousPages = minPage > pageSize;
             this.HasNextPages = pageCount > maxPage;
         }
     }

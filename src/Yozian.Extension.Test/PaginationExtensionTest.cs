@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Yozian.Extension.Pagination;
-using Yozian.Extension.Pagination.Models;
 using Yozian.Extension.Test.Data;
 using Yozian.Extension.Test.Data.Entities;
 
@@ -12,13 +11,15 @@ namespace Yozian.Extension.Test
 
     public class PaginationExtensionTest
     {
+        private static readonly int totalBooksCount = 10;
+
         [OneTimeSetUp]
         public void SetUp()
         {
 
             var dbContext = new SouthSeaDbContext();
 
-            var books = Enumerable.Range(1, 10)
+            var books = Enumerable.Range(1, totalBooksCount)
                 .Select(x => new Book()
                 {
                     Name = x.ToString()
@@ -84,8 +85,8 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(5, page.PageSize);
 
             // 
-            Assert.AreEqual(false, page.HasPreviosPages);
-            Assert.AreEqual(1, page.PreviosLastPageNo);
+            Assert.AreEqual(false, page.HasPreviousPages);
+            Assert.AreEqual(1, page.PreviousLastPageNo);
 
             //
             Assert.AreEqual(true, page.HasNextPages);
@@ -126,8 +127,8 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(5, page.PageSize);
 
             // 
-            Assert.AreEqual(true, page.HasPreviosPages);
-            Assert.AreEqual(5, page.PreviosLastPageNo);
+            Assert.AreEqual(true, page.HasPreviousPages);
+            Assert.AreEqual(5, page.PreviousLastPageNo);
 
             //
             Assert.AreEqual(true, page.HasNextPages);
@@ -165,8 +166,8 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(5, page.PageSize);
 
             // 
-            Assert.AreEqual(true, page.HasPreviosPages);
-            Assert.AreEqual(10, page.PreviosLastPageNo);
+            Assert.AreEqual(true, page.HasPreviousPages);
+            Assert.AreEqual(10, page.PreviousLastPageNo);
 
             //
             Assert.AreEqual(false, page.HasNextPages);
@@ -188,7 +189,7 @@ namespace Yozian.Extension.Test
 
             var pageSize = 5;
 
-            Page<string> page = result.ToPage(pageSize, x => x.ToString());
+            Page<string> page = result.MapTo(x => x.ToString()).ToPage(pageSize);
 
 
             Assert.AreEqual(count, page.TotalCount);
@@ -205,8 +206,8 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(5, page.PageSize);
 
             // 
-            Assert.AreEqual(true, page.HasPreviosPages);
-            Assert.AreEqual(10, page.PreviosLastPageNo);
+            Assert.AreEqual(true, page.HasPreviousPages);
+            Assert.AreEqual(10, page.PreviousLastPageNo);
 
             //
             Assert.AreEqual(false, page.HasNextPages);
@@ -234,33 +235,6 @@ namespace Yozian.Extension.Test
 
         }
 
-        [TestCase()]
-        public void Test_PaginationNextPage()
-        {
-            var count = 10;
-            var size = 3;
-            var source = Enumerable
-                .Range(1, count)
-                .AsQueryable();
-
-            var result = source.ToPagination(1, size);
-            var fetchCount = 1;
-            var startValue = result.Records.First();
-            do
-            {
-                // the first value in the next page should be 
-                Assert.AreEqual(startValue + (size * (fetchCount - 1)), result.Records.First());
-
-                result.FetchNextPage();
-
-                fetchCount++;
-            }
-            while (result.HasNextPage);
-
-            Assert.AreEqual(fetchCount, result.PageCount);
-
-
-        }
 
 
         [TestCase()]
@@ -288,31 +262,13 @@ namespace Yozian.Extension.Test
             var db = new SouthSeaDbContext();
             var size = 3;
 
-            var fetchCount = 1;
+            var page = 2;
 
-            var result = db.Books.ToPagination(1, size);
+            var result = db.Books.ToPagination(page, size);
 
-            do
-            {
-                // process records here
-                result.Records.ForEach(it =>
-                {
-                    // do somthing
+            Assert.AreEqual(size, result.Records.Count());
 
-                });
-
-                result.FetchNextPage();
-
-
-
-                fetchCount++;
-            }
-            while (result.HasNextPage);
-
-
-            Assert.AreEqual(10, result.Records.Last().Id);
-
-            Assert.AreEqual(4, fetchCount);
+            Assert.AreEqual(result.TotalCount, totalBooksCount);
 
         }
 
@@ -321,30 +277,12 @@ namespace Yozian.Extension.Test
         {
 
             var db = new SouthSeaDbContext();
-            var size = 3;
+            var size = 6;
 
-            var fetchCount = 1;
-
-            var result = await db.Books.ToPaginationAsync(1, size);
-
-            do
-            {
-                // process records here
-                result.Records.ForEach(it =>
-                {
-                    // do somthing
-
-                });
-
-                await result.FetchNextPageAsync();
-
-                fetchCount++;
-            } while (result.HasNextPage);
+            var result = await db.Books.ToPaginationAsync(2, size);
 
 
             Assert.AreEqual(10, result.Records.Last().Id);
-
-            Assert.AreEqual(4, fetchCount);
 
         }
 
