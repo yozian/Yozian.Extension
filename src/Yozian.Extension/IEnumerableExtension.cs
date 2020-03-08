@@ -28,7 +28,7 @@ namespace Yozian.Extension
             Action<T, int> processor,
             bool useNewCollection = false)
         {
-            // clone & could modify on origin collection dimesion
+            // clone & could modify on origin collection dimension
             var collection = useNewCollection ? @this.ToList() : @this;
             var index = 0;
             foreach (var item in collection)
@@ -65,19 +65,18 @@ namespace Yozian.Extension
         }
 
         /// <summary>
-        ///
+        /// loop for items by paging
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="this"></param>
-        /// <param name="size"></param>
+        /// <param name="limits"></param>
         /// <param name="processor"></param>
-        [Obsolete("You should use ToPagination in IQueryable(such call AsQueryable() method), This method will be removed for the next version.")]
         public static void ForEachPage<T>(
               this IEnumerable<T> @this,
-              int size,
+              int limits,
               Action<IEnumerable<T>, int> processor)
         {
-            var pagination = @this.ToPagination(size);
+            var pagination = @this.ToPagination(limits);
 
             pagination.Pages.ForEach((page, index) =>
             {
@@ -86,8 +85,7 @@ namespace Yozian.Extension
             });
         }
 
-        [Obsolete("You should use ToPagination in IQueryable(such call AsQueryable() method), This method will be removed for the next version.")]
-        public static Pagination<T> ToPagination<T>(
+        private static Pagination<T> ToPagination<T>(
               this IEnumerable<T> @this,
               int limits
             )
@@ -140,7 +138,7 @@ namespace Yozian.Extension
             return pagination;
         }
 
-        public class Pagination<T>
+        protected class Pagination<T>
         {
             public int PageCount { get; set; }
             public int Limits { get; set; }
