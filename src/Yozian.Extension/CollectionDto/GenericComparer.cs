@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Yozian.Extension.CollectionDto
 {
     /// <summary>
-    ///
+    ///  Note that Object HashCode is ignored here to be compared!
     /// </summary>
     public class GenericComparer<T> : IEqualityComparer<T>
         where T : new()
@@ -23,7 +23,7 @@ namespace Yozian.Extension.CollectionDto
 
         public virtual int GetHashCode(T obj)
         {
-            return obj.GetHashCode();
+            return 0;
         }
     }
 }
