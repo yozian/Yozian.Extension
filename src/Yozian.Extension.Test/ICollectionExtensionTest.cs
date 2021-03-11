@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Yozian.Extension.CollectionDto;
+using Yozian.Extension.Test.Data.Entities;
 
 namespace Yozian.Extension.Test
 {
@@ -67,6 +68,46 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(2, excludedList.Count);
 
             Assert.AreEqual("6,7", string.Join(",", excludedList.Select(x => x.Key)));
+        }
+
+        [TestCase()]
+        public void Test_ObjectComparer()
+        {
+            var sourceA = Enumerable
+                .Range(1, 7)
+                .Select(
+                    i => new Book
+                    {
+                        Id = i,
+                        Name = i.ToString()
+                    }
+                )
+                .ToList();
+
+
+            var sourceB = Enumerable
+                .Range(1, 5)
+                .Select(
+                    i => new Book
+                    {
+                        Id = i,
+                        Name = i.ToString()
+                    }
+                )
+                .ToList();
+
+
+            var excludedList = sourceA
+                .Except(
+                    sourceB,
+                    new GenericComparer<Book>((x, y) => x.Id == y.Id)
+                )
+                .ToList();
+
+
+            Assert.AreEqual(2, excludedList.Count);
+
+            Assert.AreEqual("6,7", string.Join(",", excludedList.Select(x => x.Id)));
         }
     }
 }
