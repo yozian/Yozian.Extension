@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NUnit.Framework;
 using Yozian.Extension.Test.TestMaterial;
 
@@ -19,10 +22,7 @@ namespace Yozian.Extension.Test
         {
             var list = Enumerable.Range(1, 5);
 
-            list.ForEach(x =>
-            {
-                Console.Write(x);
-            });
+            list.ForEach(x => { Console.Write(x); });
 
 
             Assert.Pass();
@@ -34,10 +34,7 @@ namespace Yozian.Extension.Test
         {
             var list = Enumerable.Range(1, 5);
 
-            list.ForEach((x, index) =>
-            {
-                Console.Write($"{x}({index})");
-            });
+            list.ForEach((x, index) => { Console.Write($"{x}({index})"); });
 
             Assert.Pass();
         }
@@ -69,23 +66,26 @@ namespace Yozian.Extension.Test
         {
             var list = new List<Person>()
             {
-                new Person(){
+                new Person()
+                {
                     Name = "A",
                     Age = 10
                 },
-                new Person(){
+                new Person()
+                {
                     Name = "B",
                     Age = 10
                 },
-                new Person(){
+                new Person()
+                {
                     Name = "C",
                     Age = 11
                 },
-                    new Person(){
+                new Person()
+                {
                     Name = "C",
                     Age = 11
                 },
-
             };
 
             var byName = list.DistinctBy(x => x.Name);
@@ -93,35 +93,34 @@ namespace Yozian.Extension.Test
 
             var byAge = list.DistinctBy(x => x.Age);
             Assert.AreEqual(2, byAge.Count());
-
         }
 
 
-        [TestCase(3)]
-        [TestCase(5)]
-        [TestCase(12)]
-        public void Test_ToPagination(int total)
-        {
-            var limits = 5;
-            var list = Enumerable.Range(0, total).ToList();
-
-            var pagination = list.ToPagination(limits);
-
-            var pageCount = 0;
-            if (list.Count() % limits == 0)
-            {
-                pageCount = list.Count() / limits;
-            }
-            else
-            {
-                pageCount = list.Count() / limits + 1;
-            }
-
-            Assert.AreEqual(pageCount, pagination.PageCount);
-            Assert.AreEqual(pageCount, pagination.Pages.Count());
-            Assert.AreEqual(total, pagination.Pages.SelectMany(x => x.ToList()).Count());
-            Assert.AreEqual(limits, pagination.Limits);
-        }
+        // [TestCase(3)]
+        // [TestCase(5)]
+        // [TestCase(12)]
+        // public void Test_ToPagination(int total)
+        // {
+        //     var limits = 5;
+        //     var list = Enumerable.Range(0, total).ToList();
+        //
+        //     var pagination = list.ToPagination(limits);
+        //
+        //     var pageCount = 0;
+        //     if (list.Count() % limits == 0)
+        //     {
+        //         pageCount = list.Count() / limits;
+        //     }
+        //     else
+        //     {
+        //         pageCount = list.Count() / limits + 1;
+        //     }
+        //
+        //     Assert.AreEqual(pageCount, pagination.PageCount);
+        //     Assert.AreEqual(pageCount, pagination.Pages.Count());
+        //     Assert.AreEqual(total, pagination.Pages.SelectMany(x => x.ToList()).Count());
+        //     Assert.AreEqual(limits, pagination.Limits);
+        // }
 
         [TestCase(12)]
         public void Test_ForEachPage(int total)
@@ -145,10 +144,7 @@ namespace Yozian.Extension.Test
                         }
                     }
                 );
-
         }
 
-
-       
     }
 }

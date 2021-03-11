@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Yozian.Extension.Pagination;
 
@@ -13,7 +14,7 @@ namespace Yozian.Extension
             this IEnumerable<T> @this,
             Action<T> processor,
             bool useNewList = false
-            )
+        )
         {
             // clone & could modify on origin collection
             var cloned = useNewList ? @this.ToList() : @this;
@@ -26,7 +27,8 @@ namespace Yozian.Extension
         public static void ForEach<T>(
             this IEnumerable<T> @this,
             Action<T, int> processor,
-            bool useNewCollection = false)
+            bool useNewCollection = false
+        )
         {
             // clone & could modify on origin collection dimension
             var collection = useNewCollection ? @this.ToList() : @this;
@@ -38,20 +40,39 @@ namespace Yozian.Extension
             }
         }
 
-        public static string FlattenToString<T>(this IEnumerable<T> @this, string seperator = "")
+        public static async Task ForEachAsync<T>(
+            this IEnumerable<T> @this,
+            Func<T, int, CancellationToken, Task> processor,
+            bool useNewCollection = false,
+            CancellationToken cancellationToken = default
+        )
         {
-            return string.Join(seperator, @this.Select(x => x.ToString()));
+            // clone & could modify on origin collection dimension
+            var collection = useNewCollection ? @this.ToList() : @this;
+            var index = 0;
+            foreach (var item in collection)
+            {
+                await processor(item, index, cancellationToken);
+                index++;
+            }
         }
 
-        public static string FlattenToString<T>(this IEnumerable<T> @this, Func<T, string> converter, string seperator = "")
+        public static string FlattenToString<T>(this IEnumerable<T> @this, string separator = "")
         {
-            return string.Join(seperator, @this.Select(converter));
+            return string.Join(separator, @this.Select(x => x.ToString()));
+        }
+
+        public static string FlattenToString<T>(this IEnumerable<T> @this, Func<T, string> converter,
+            string separator = ""
+        )
+        {
+            return string.Join(separator, @this.Select(converter));
         }
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
             this IEnumerable<TSource> @this,
             Func<TSource, TKey> targetProperty
-            )
+        )
         {
             var seenKeys = new HashSet<TKey>();
             foreach (var element in @this)
@@ -72,38 +93,43 @@ namespace Yozian.Extension
         /// <param name="limits"></param>
         /// <param name="processor"></param>
         public static void ForEachPage<T>(
-              this IEnumerable<T> @this,
-              int limits,
-              Action<IEnumerable<T>, int> processor)
+            this IEnumerable<T> @this,
+            int limits,
+            Action<IEnumerable<T>, int> processor
+        )
         {
             var pagination = @this.ToPagination(limits);
 
-            pagination.Pages.ForEach((page, index) =>
-            {
-                // page start from 1
-                processor(page, index + 1);
-            });
+            pagination.Pages.ForEach(
+                (page, index) =>
+                {
+                    // page start from 1
+                    processor(page, index + 1);
+                }
+            );
         }
 
         private static Pagination<T> ToPagination<T>(
-              this IEnumerable<T> @this,
-              int limits
-            )
+            this IEnumerable<T> @this,
+            int limits
+        )
         {
             if (limits <= 0)
             {
                 throw new ArgumentException($"Limits should be greater than 0!");
             }
 
+            var source = @this.ToList();
+
             var pageCount = 0;
 
-            if (@this.Count() % limits == 0)
+            if (source.Count() % limits == 0)
             {
-                pageCount = @this.Count() / limits;
+                pageCount = source.Count() / limits;
             }
             else
             {
-                pageCount = @this.Count() / limits + 1;
+                pageCount = source.Count() / limits + 1;
             }
 
             var pagination = new Pagination<T>()
@@ -118,12 +144,12 @@ namespace Yozian.Extension
 
             while (page < pagination.PageCount)
             {
-                var processList = @this
-                        .Skip(limits * page)
-                        .Take(limits)
-                        .ToList();
+                var processList = source
+                    .Skip(limits * page)
+                    .Take(limits)
+                    .ToList();
 
-                if (processList.Count() <= 0)
+                if (!processList.Any())
                 {
                     break;
                 }
@@ -137,16 +163,16 @@ namespace Yozian.Extension
 
             return pagination;
         }
+    }
 
-        protected class Pagination<T>
+    internal class Pagination<T>
+    {
+        public int PageCount { get; set; }
+        public int Limits { get; set; }
+        public IEnumerable<IEnumerable<T>> Pages { get; set; }
+
+        internal Pagination()
         {
-            public int PageCount { get; set; }
-            public int Limits { get; set; }
-            public IEnumerable<IEnumerable<T>> Pages { get; set; }
-
-            internal Pagination()
-            {
-            }
         }
     }
 }
