@@ -38,7 +38,7 @@ namespace Yozian.Extension
             return @this;
         }
 
-        public static string Repeate(
+        public static string Repeat(
             this string @this,
             int count,
             string seperator = ""
