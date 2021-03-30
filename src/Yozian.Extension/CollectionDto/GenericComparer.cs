@@ -8,32 +8,34 @@ namespace Yozian.Extension.CollectionDto
     /// </summary>
     public class GenericComparer<T> : IEqualityComparer<T>
     {
-        private readonly Func<T, T, bool> compareMethod;
-        private readonly Func<T, int> hashCodeMethod = (x)=> 0;
+        private readonly Func<T, T, bool> compare;
+        private readonly Func<T, int> hashCode = (x) => 0;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="compareMethod"></param>
-        /// <param name="hashCodeMethod"></param>
+        /// <param name="compare">identify x and y</param>
+        /// <param name="hashCode">return the object's hashCode default = 0 (ignore hash comparison)</param>
         public GenericComparer(
-            Func<T, T, bool> compareMethod,
-            Func<T, int> hashCodeMethod = null)
+            Func<T, T, bool> compare,
+            Func<T, int> hashCode = null
+        )
         {
-            this.compareMethod = compareMethod;
-            if (hashCodeMethod != null) {
-                this.hashCodeMethod = hashCodeMethod;
+            this.compare = compare;
+            if (hashCode != null)
+            {
+                this.hashCode = hashCode;
             }
         }
 
         public bool Equals(T x, T y)
         {
-            return this.compareMethod(x, y);
+            return this.compare(x, y);
         }
 
         public virtual int GetHashCode(T obj)
         {
-            return this.hashCodeMethod(obj);
+            return this.hashCode(obj);
         }
     }
 }

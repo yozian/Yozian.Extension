@@ -171,22 +171,25 @@ namespace Yozian.Extension
         /// <typeparam name="T"></typeparam>
         /// <param name="this"></param>
         /// <param name="targets"></param>
-        /// <param name="comparerMethod"></param>
-        /// <param name="getHashCodeMethod"></param>
+        /// <param name="comparer"></param>
+        /// <param name="hashCode"></param>
         /// <returns></returns>
         public static IEnumerable<T> Except<T>(
-            this IEnumerable<T> @this, IEnumerable<T> targets, 
-            Func<T, T, bool> comparerMethod,
-            Func<T, int> getHashCodeMethod = null)
+            this IEnumerable<T> @this, IEnumerable<T> targets,
+            Func<T, T, bool> comparer,
+            Func<T, int> hashCode = null
+        )
         {
-            return @this.Except(targets, new GenericComparer<T>(comparerMethod, getHashCodeMethod));
+            return @this.Except(targets, new GenericComparer<T>(comparer, hashCode));
         }
     }
 
     internal class Pagination<T>
     {
         public int PageCount { get; set; }
+
         public int Limits { get; set; }
+
         public IEnumerable<IEnumerable<T>> Pages { get; set; }
 
         internal Pagination()
