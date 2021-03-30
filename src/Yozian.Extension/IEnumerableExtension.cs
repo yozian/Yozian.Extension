@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Yozian.Extension.CollectionDto;
 using Yozian.Extension.Pagination;
 
 namespace Yozian.Extension
@@ -162,6 +163,23 @@ namespace Yozian.Extension
             pagination.Pages = pages;
 
             return pagination;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="targets"></param>
+        /// <param name="comparerMethod"></param>
+        /// <param name="getHashCodeMethod"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Except<T>(
+            this IEnumerable<T> @this, IEnumerable<T> targets, 
+            Func<T, T, bool> comparerMethod,
+            Func<T, int> getHashCodeMethod = null)
+        {
+            return @this.Except(targets, new GenericComparer<T>(comparerMethod, getHashCodeMethod));
         }
     }
 

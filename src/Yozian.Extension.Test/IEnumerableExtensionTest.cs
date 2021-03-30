@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NUnit.Framework;
+using Yozian.Extension.CollectionDto;
 using Yozian.Extension.Test.TestMaterial;
 
 namespace Yozian.Extension.Test
@@ -146,5 +147,59 @@ namespace Yozian.Extension.Test
                 );
         }
 
+
+        [TestCase]
+        public void Test_ExceptGenericCompare()
+        {
+            var source = Enumerable.Range(1, 10);
+            var targets = Enumerable.Range(6, 10);
+
+            var results = source
+                .Except(
+                    targets,
+                    new GenericComparer<int>((x, y) => x == y)
+                )
+                .ToList();
+
+
+            Assert.AreEqual(5, results.Count());
+
+            Assert.AreEqual(results.Last(), 5);
+        }
+
+
+        [TestCase]
+        public void Test_ExceptLambadaCompare()
+        {
+            var source = Enumerable.Range(1, 10)
+                .Select(
+                    x => new Person
+                    {
+                        Name = x.ToString(),
+                        Age = 1
+                    }
+                )
+                .ToList();
+
+            var targets = Enumerable.Range(6, 10)
+                .Select(
+                    x => new Person
+                    {
+                        Name = x.ToString(),
+                        Age = 1
+                    }
+                );
+
+            var results = source
+                .Except(
+                    targets,
+                    (x, y) => x.Name == y.Name
+                )
+                .ToList();
+
+            Assert.AreEqual(5, results.Count());
+
+            Assert.AreEqual(results.Last().Name, "5");
+        }
     }
 }
