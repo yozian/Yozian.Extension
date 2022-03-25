@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Yozian.Extension.Pagination
 {
@@ -69,17 +66,17 @@ namespace Yozian.Extension.Pagination
         {
             if (1 > navigatorPageSize)
             {
-                throw new ArgumentException($"navigatorPageSize should be greater than 0");
+                throw new ArgumentException("navigatorPageSize should be greater than 0");
             }
 
             return new Page<T>(
-                               this.Records,
-                               this.TotalCount,
-                               this.PageCount,
-                               this.CurrentPage,
-                               this.Size,
-                               navigatorPageSize
-                              );
+                this.Records,
+                this.TotalCount,
+                this.PageCount,
+                this.CurrentPage,
+                this.Size,
+                navigatorPageSize
+            );
         }
 
         private static int calculatePageCount(int limits, int totalCount)
@@ -91,7 +88,7 @@ namespace Yozian.Extension.Pagination
 
             var remainder = totalCount % limits;
 
-            return (totalCount / limits) + (remainder.Equals(0) ? 0 : 1);
+            return totalCount / limits + (remainder.Equals(0) ? 0 : 1);
         }
     }
 }

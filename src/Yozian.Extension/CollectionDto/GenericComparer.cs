@@ -9,7 +9,7 @@ namespace Yozian.Extension.CollectionDto
     public class GenericComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> compare;
-        private readonly Func<T, int> hashCode = (x) => 0;
+        private readonly Func<T, int> hashCode = x => 0;
 
         /// <summary>
         /// 
@@ -22,6 +22,7 @@ namespace Yozian.Extension.CollectionDto
         )
         {
             this.compare = compare;
+
             if (hashCode != null)
             {
                 this.hashCode = hashCode;

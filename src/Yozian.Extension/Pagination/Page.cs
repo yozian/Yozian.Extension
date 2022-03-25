@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Yozian.Extension.Pagination
 {
@@ -31,6 +30,50 @@ namespace Yozian.Extension.Pagination
         /// records of current page
         /// </summary>
         public IEnumerable<T> Records { get; private set; }
+
+        public Page(
+            IEnumerable<T> records,
+            int totalCount,
+            int pageCount,
+            int currentPage,
+            int size,
+            int pageSize
+        )
+        {
+            this.TotalCount = totalCount;
+            this.PageCount = pageCount;
+            this.CurrentPage = currentPage;
+            this.Size = size;
+            this.PageSize = pageSize;
+            this.Records = records;
+
+            //
+            this.calculateNavigation(totalCount, pageCount, currentPage, pageSize);
+        }
+
+        private void calculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
+        {
+            var isTimesOfDisplayPagesCount = currentPage % pageSize == 0;
+
+            var startIndex = isTimesOfDisplayPagesCount
+                ? (currentPage / pageSize - 1) * pageSize + 1
+                : currentPage / pageSize * pageSize + 1;
+
+            var navigationPages = Enumerable
+               .Range(startIndex, pageSize)
+               .Where(p => p <= pageCount)
+               .ToList();
+
+            var minPage = navigationPages.Any() ? navigationPages.First() : 1;
+            var maxPage = navigationPages.Any() ? navigationPages.Last() : 1;
+
+            // binding
+            this.NavigationPages = navigationPages;
+            this.PreviousLastPageNo = Math.Max(minPage - 1, 1);
+            this.NextStartPageNo = Math.Min(maxPage + 1, pageCount);
+            this.HasPreviousPages = minPage > pageSize;
+            this.HasNextPages = pageCount > maxPage;
+        }
 
         #region navigation
 
@@ -67,49 +110,5 @@ namespace Yozian.Extension.Pagination
         public IEnumerable<int> NavigationPages { get; private set; }
 
         #endregion navigation
-
-        public Page(
-            IEnumerable<T> records,
-            int totalCount,
-            int pageCount,
-            int currentPage,
-            int size,
-            int pageSize
-        )
-        {
-            this.TotalCount = totalCount;
-            this.PageCount = pageCount;
-            this.CurrentPage = currentPage;
-            this.Size = size;
-            this.PageSize = pageSize;
-            this.Records = records;
-
-            //
-            this.calculateNavigation(totalCount, pageCount, currentPage, pageSize);
-        }
-
-        private void calculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
-        {
-            var isTimesOfDisplayPagesCount = (currentPage % pageSize) == 0;
-
-            var startIndex = isTimesOfDisplayPagesCount
-                ? ((currentPage / pageSize) - 1) * pageSize + 1
-                : (currentPage / pageSize) * pageSize + 1;
-
-            var navigationPages = Enumerable
-               .Range(startIndex, pageSize)
-               .Where(p => p <= pageCount)
-               .ToList();
-
-            var minPage = navigationPages.Any() ? navigationPages.First() : 1;
-            var maxPage = navigationPages.Any() ? navigationPages.Last() : 1;
-
-            // binding
-            this.NavigationPages = navigationPages;
-            this.PreviousLastPageNo = Math.Max(minPage - 1, 1);
-            this.NextStartPageNo = Math.Min(maxPage + 1, pageCount);
-            this.HasPreviousPages = minPage > pageSize;
-            this.HasNextPages = pageCount > maxPage;
-        }
     }
 }

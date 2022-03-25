@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Yozian.Extension
 {
@@ -10,16 +6,15 @@ namespace Yozian.Extension
     {
         public static TValue SafeGet<TKey, TValue>(
             this IDictionary<TKey, TValue> @this,
-            TKey key)
+            TKey key
+        )
         {
             if (@this.ContainsKey(key))
             {
                 return @this[key];
             }
-            else
-            {
-                return default(TValue);
-            }
+
+            return default(TValue);
         }
     }
 }

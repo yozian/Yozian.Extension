@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Yozian.Extension
 {
@@ -12,7 +10,7 @@ namespace Yozian.Extension
         {
             try
             {
-                return (T)Enum.Parse(typeof(T), @this, true);
+                return (T) Enum.Parse(typeof(T), @this, true);
             }
             catch (Exception)
             {
@@ -20,6 +18,7 @@ namespace Yozian.Extension
                 {
                     throw;
                 }
+
                 return default(T);
             }
         }
@@ -35,6 +34,7 @@ namespace Yozian.Extension
             {
                 return @this.Substring(0, length);
             }
+
             return @this;
         }
 
@@ -43,7 +43,7 @@ namespace Yozian.Extension
             this string @this,
             int count,
             string seperator = ""
-            )
+        )
         {
             return Repeat(@this, count, seperator);
         }
@@ -51,10 +51,10 @@ namespace Yozian.Extension
         public static string Repeat(
             this string @this,
             int count,
-            string seperator = ""
-            )
+            string separator = ""
+        )
         {
-            return string.Join(seperator, Enumerable.Repeat(@this, count));
+            return string.Join(separator, Enumerable.Repeat(@this, count));
         }
 
         public static string EncodeToBase64(this string @this)
@@ -63,6 +63,7 @@ namespace Yozian.Extension
             {
                 return @this;
             }
+
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(@this));
         }
 
@@ -72,6 +73,7 @@ namespace Yozian.Extension
             {
                 return @this;
             }
+
             return Encoding.UTF8.GetString(Convert.FromBase64String(@this));
         }
     }

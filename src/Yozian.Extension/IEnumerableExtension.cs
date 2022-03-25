@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Yozian.Extension.CollectionDto;
-using Yozian.Extension.Pagination;
 
 namespace Yozian.Extension
 {
@@ -19,6 +17,7 @@ namespace Yozian.Extension
         {
             // clone & could modify on origin collection
             var cloned = useNewList ? @this.ToList() : @this;
+
             foreach (var item in cloned)
             {
                 processor(item);
@@ -34,6 +33,7 @@ namespace Yozian.Extension
             // clone & could modify on origin collection dimension
             var collection = useNewCollection ? @this.ToList() : @this;
             var index = 0;
+
             foreach (var item in collection)
             {
                 processor(item, index);
@@ -51,6 +51,7 @@ namespace Yozian.Extension
             // clone & could modify on origin collection dimension
             var collection = useNewCollection ? @this.ToList() : @this;
             var index = 0;
+
             foreach (var item in collection)
             {
                 await processor(item, index, cancellationToken);
@@ -63,7 +64,9 @@ namespace Yozian.Extension
             return string.Join(separator, @this.Select(x => x.ToString()));
         }
 
-        public static string FlattenToString<T>(this IEnumerable<T> @this, Func<T, string> converter,
+        public static string FlattenToString<T>(
+            this IEnumerable<T> @this,
+            Func<T, string> converter,
             string separator = ""
         )
         {
@@ -76,9 +79,11 @@ namespace Yozian.Extension
         )
         {
             var seenKeys = new HashSet<TKey>();
+
             foreach (var element in @this)
             {
                 var keys = targetProperty(element);
+
                 if (seenKeys.Add(keys))
                 {
                     yield return element;
@@ -117,7 +122,7 @@ namespace Yozian.Extension
         {
             if (limits <= 0)
             {
-                throw new ArgumentException($"Limits should be greater than 0!");
+                throw new ArgumentException("Limits should be greater than 0!");
             }
 
             var source = @this.ToList();
@@ -146,9 +151,9 @@ namespace Yozian.Extension
             while (page < pagination.PageCount)
             {
                 var processList = source
-                    .Skip(limits * page)
-                    .Take(limits)
-                    .ToList();
+                   .Skip(limits * page)
+                   .Take(limits)
+                   .ToList();
 
                 if (!processList.Any())
                 {
@@ -175,7 +180,8 @@ namespace Yozian.Extension
         /// <param name="hashCode"></param>
         /// <returns></returns>
         public static IEnumerable<T> Except<T>(
-            this IEnumerable<T> @this, IEnumerable<T> targets,
+            this IEnumerable<T> @this,
+            IEnumerable<T> targets,
             Func<T, T, bool> comparer,
             Func<T, int> hashCode = null
         )
@@ -191,9 +197,5 @@ namespace Yozian.Extension
         public int Limits { get; set; }
 
         public IEnumerable<IEnumerable<T>> Pages { get; set; }
-
-        internal Pagination()
-        {
-        }
     }
 }

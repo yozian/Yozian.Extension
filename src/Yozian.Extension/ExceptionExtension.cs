@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Yozian.Extension
 {
@@ -14,6 +12,7 @@ namespace Yozian.Extension
             var sb = new StringBuilder();
             var st = new StackTrace(ex, true);
             var innerException = ex;
+
             while (innerException != null)
             {
                 sb.AppendLine($"ErrorMessage: {innerException.Message}");
@@ -30,29 +29,33 @@ namespace Yozian.Extension
             }
 
             frames
-                .Select(frame => new
-                {
-                    FileName = frame.GetFileName(),
-                    LineNumber = frame.GetFileLineNumber(),
-                    ColumnNumber = frame.GetFileColumnNumber(),
-                    Method = frame.GetMethod(),
-                    Class = frame.GetMethod().DeclaringType
-                })
-                .Reverse()
-                .ForEach(info =>
-                {
-                    sb.AppendLine($"class:{info.Class?.FullName}");
-                    sb.AppendLine($"method:{info.Method?.Name}");
-
-                    // only print for our source
-                    if (!string.IsNullOrEmpty(info.FileName))
+               .Select(
+                    frame => new
                     {
-                        sb.AppendLine($"file:{info.FileName}");
-                        sb.AppendLine($"line:{info.LineNumber}");
-                        sb.AppendLine($"column:{info.ColumnNumber}");
-                        sb.AppendLine("----------Next-----------");
+                        FileName = frame.GetFileName(),
+                        LineNumber = frame.GetFileLineNumber(),
+                        ColumnNumber = frame.GetFileColumnNumber(),
+                        Method = frame.GetMethod(),
+                        Class = frame.GetMethod().DeclaringType
                     }
-                });
+                )
+               .Reverse()
+               .ForEach(
+                    info =>
+                    {
+                        sb.AppendLine($"class:{info.Class?.FullName}");
+                        sb.AppendLine($"method:{info.Method?.Name}");
+
+                        // only print for our source
+                        if (!string.IsNullOrEmpty(info.FileName))
+                        {
+                            sb.AppendLine($"file:{info.FileName}");
+                            sb.AppendLine($"line:{info.LineNumber}");
+                            sb.AppendLine($"column:{info.ColumnNumber}");
+                            sb.AppendLine("----------Next-----------");
+                        }
+                    }
+                );
 
             // wait to implement serializer
             // sb.AppendLine("--------Data----------");

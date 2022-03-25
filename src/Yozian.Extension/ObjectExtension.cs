@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace Yozian.Extension
 {
@@ -21,15 +18,17 @@ namespace Yozian.Extension
         /// <param name="@this"></param>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public static T ConvertAll<T, Target>(this T @this, Func<Target, Target> transform) where T : class
+        public static T ConvertAll<T, Target>(this T @this, Func<Target, Target> transform)
+            where T : class
         {
             Contract.Ensures(Contract.Result<Target>() != null);
             var propinfo = @this.GetType()
-                               .GetProperties()
-                               .Where(x => x.PropertyType == typeof(Target));
+               .GetProperties()
+               .Where(x => x.PropertyType == typeof(Target));
+
             foreach (var prop in propinfo)
             {
-                var currentVal = (Target)prop.GetValue(@this, null);
+                var currentVal = (Target) prop.GetValue(@this, null);
                 var newVal = transform(currentVal);
                 prop.SetValue(@this, newVal, null);
             }
@@ -37,15 +36,14 @@ namespace Yozian.Extension
             return @this;
         }
 
-        public static T ShallowClone<T>(this T @this) where T : new()
+        public static T ShallowClone<T>(this T @this)
+            where T : new()
         {
             var obj = new T();
             obj.GetType()
-                .GetProperties()
-                .ForEach((prop) =>
-                {
-                    prop.SetValue(obj, prop.GetValue(@this));
-                });
+               .GetProperties()
+               .ForEach(prop => { prop.SetValue(obj, prop.GetValue(@this)); });
+
             return obj;
         }
     }
