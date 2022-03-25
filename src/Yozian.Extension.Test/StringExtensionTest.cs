@@ -62,11 +62,11 @@ namespace Yozian.Extension.Test
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(3)]
-        public void Test_Repeate(int count)
+        public void Test_Repeat(int count)
         {
             var text = "abc";
 
-            var result = text.Repeate(count);
+            var result = text.Repeat(count);
 
             Assert.AreEqual(text.Length * count, result.Length);
         }
