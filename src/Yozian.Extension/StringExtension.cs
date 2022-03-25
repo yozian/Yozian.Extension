@@ -38,15 +38,6 @@ namespace Yozian.Extension
             return @this;
         }
 
-        [Obsolete("Use [Repeat] instead, this (typo) method name will be remove in the next version!")]
-        public static string Repeate(
-            this string @this,
-            int count,
-            string seperator = ""
-        )
-        {
-            return Repeat(@this, count, seperator);
-        }
 
         public static string Repeat(
             this string @this,
