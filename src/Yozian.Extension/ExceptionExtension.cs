@@ -13,11 +13,11 @@ namespace Yozian.Extension
         {
             var sb = new StringBuilder();
             var st = new StackTrace(ex, true);
-            var innerExeption = ex;
-            while (innerExeption != null)
+            var innerException = ex;
+            while (innerException != null)
             {
-                sb.AppendLine($"ErrorMessage: {innerExeption.Message}");
-                innerExeption = innerExeption.InnerException;
+                sb.AppendLine($"ErrorMessage: {innerException.Message}");
+                innerException = innerException.InnerException;
             }
 
             sb.AppendLine("--------StackTrace----------");
