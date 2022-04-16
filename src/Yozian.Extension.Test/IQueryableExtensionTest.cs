@@ -17,10 +17,10 @@ namespace Yozian.Extension.Test
             var count = 100;
             var limit = 50;
             var list = Enumerable
-                .Range(1, count)
-                .AsQueryable()
-                .WhereWhen(condition, x => x <= limit)
-                .ToList();
+               .Range(1, count)
+               .AsQueryable()
+               .WhereWhen(condition, x => x <= limit)
+               .ToList();
 
             if (condition)
             {
@@ -30,7 +30,6 @@ namespace Yozian.Extension.Test
             {
                 Assert.AreEqual(count, list.Count);
             }
-
         }
     }
 }

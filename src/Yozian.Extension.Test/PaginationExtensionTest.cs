@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Yozian.Extension.Pagination;
 using Yozian.Extension.Test.Data;
@@ -30,7 +31,7 @@ namespace Yozian.Extension.Test
             dbContext.SaveChanges();
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_Pagination()
         {
             var count = 10;
@@ -63,15 +64,15 @@ namespace Yozian.Extension.Test
 
             var pageSize = 5;
 
-            Page<int> page = result.ToPage(pageSize);
+            var page = result.ToPage(pageSize);
 
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(page));
+            Console.WriteLine(JsonConvert.SerializeObject(page));
 
             Assert.AreEqual(count, page.TotalCount);
             Assert.AreEqual(size, page.Records.Count());
             Assert.AreEqual(currentPage, page.CurrentPage);
 
-            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+            Assert.AreEqual(count / size + (count % size == 0 ? 0 : 1), page.PageCount);
 
             var currentSize = currentPage == 11 ? count % size : size;
             Assert.AreEqual(currentSize, page.Records.Count());
@@ -104,13 +105,13 @@ namespace Yozian.Extension.Test
 
             var pageSize = 5;
 
-            Page<int> page = result.ToPage(pageSize);
+            var page = result.ToPage(pageSize);
 
             Assert.AreEqual(count, page.TotalCount);
             Assert.AreEqual(size, page.Records.Count());
             Assert.AreEqual(currentPage, page.CurrentPage);
 
-            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+            Assert.AreEqual(count / size + (count % size == 0 ? 0 : 1), page.PageCount);
 
             var currentSize = currentPage == 11 ? count % size : size;
             Assert.AreEqual(currentSize, page.Records.Count());
@@ -140,13 +141,13 @@ namespace Yozian.Extension.Test
 
             var pageSize = 5;
 
-            Page<int> page = result.ToPage(pageSize);
+            var page = result.ToPage(pageSize);
 
             Assert.AreEqual(count, page.TotalCount);
             Assert.AreEqual(count % size, page.Records.Count());
             Assert.AreEqual(currentPage, page.CurrentPage);
 
-            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+            Assert.AreEqual(count / size + (count % size == 0 ? 0 : 1), page.PageCount);
 
             var currentSize = currentPage == 11 ? count % size : size;
             Assert.AreEqual(currentSize, page.Records.Count());
@@ -176,13 +177,13 @@ namespace Yozian.Extension.Test
 
             var pageSize = 5;
 
-            Page<string> page = result.MapTo(x => x.ToString()).ToPage(pageSize);
+            var page = result.MapTo(x => x.ToString()).ToPage(pageSize);
 
             Assert.AreEqual(count, page.TotalCount);
             Assert.AreEqual(count % size, page.Records.Count());
             Assert.AreEqual(currentPage, page.CurrentPage);
 
-            Assert.AreEqual((count / size) + (count % size == 0 ? 0 : 1), page.PageCount);
+            Assert.AreEqual(count / size + (count % size == 0 ? 0 : 1), page.PageCount);
 
             var currentSize = currentPage == 11 ? count % size : size;
             Assert.AreEqual(currentSize, page.Records.Count());
@@ -200,7 +201,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_PaginationWithConverter()
         {
             var count = 10;
@@ -219,7 +220,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_PaginationForEfCore()
         {
             var db = new SouthSeaDbContext();
@@ -235,7 +236,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_PaginationHasNextPageForEfCore()
         {
             var db = new SouthSeaDbContext();
@@ -250,7 +251,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(result.TotalCount, totalBooksCount);
         }
 
-        [TestCase()]
+        [TestCase]
         public async Task Test_PaginationAsyncForEfCore()
         {
             var db = new SouthSeaDbContext();
@@ -262,7 +263,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_ToPagination()
         {
             var count = 100;

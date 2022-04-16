@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NUnit.Framework;
 using Yozian.Extension.CollectionDto;
 using Yozian.Extension.Test.TestMaterial;
@@ -18,19 +13,18 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_ForEach()
         {
             var list = Enumerable.Range(1, 5);
 
             list.ForEach(x => { Console.Write(x); });
 
-
             Assert.Pass();
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_ForEachWithIndex()
         {
             var list = Enumerable.Range(1, 5);
@@ -41,7 +35,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_FlattenToString()
         {
             var list = Enumerable.Range(1, 5).Select(x => x.ToString());
@@ -51,7 +45,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual("12345", result);
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_FlattenToStringWithConverter()
         {
             var list = Enumerable.Range(1, 5);
@@ -60,7 +54,6 @@ namespace Yozian.Extension.Test
 
             Assert.AreEqual("246810", result);
         }
-
 
 
         // [TestCase(3)]
@@ -95,8 +88,8 @@ namespace Yozian.Extension.Test
             var limits = 5;
 
             Enumerable
-                .Range(0, total)
-                .ForEachPage(
+               .Range(0, total)
+               .ForEachPage(
                     limits,
                     (data, page) =>
                     {
@@ -121,12 +114,11 @@ namespace Yozian.Extension.Test
             var targets = Enumerable.Range(6, 10);
 
             var results = source
-                .Except(
+               .Except(
                     targets,
                     new GenericComparer<int>((x, y) => x == y)
                 )
-                .ToList();
-
+               .ToList();
 
             Assert.AreEqual(5, results.Count());
 
@@ -138,17 +130,17 @@ namespace Yozian.Extension.Test
         public void Test_ExceptLambadaCompare()
         {
             var source = Enumerable.Range(1, 10)
-                .Select(
+               .Select(
                     x => new Person
                     {
                         Name = x.ToString(),
                         Age = 1
                     }
                 )
-                .ToList();
+               .ToList();
 
             var targets = Enumerable.Range(6, 10)
-                .Select(
+               .Select(
                     x => new Person
                     {
                         Name = x.ToString(),
@@ -157,11 +149,11 @@ namespace Yozian.Extension.Test
                 );
 
             var results = source
-                .Except(
+               .Except(
                     targets,
                     (x, y) => x.Name == y.Name
                 )
-                .ToList();
+               .ToList();
 
             Assert.AreEqual(5, results.Count());
 

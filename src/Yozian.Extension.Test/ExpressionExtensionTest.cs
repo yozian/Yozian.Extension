@@ -12,18 +12,14 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_GetMemberName()
         {
-
-            Expression<Func<Person, object>> expr = (Person x) => x.Name;
+            Expression<Func<Person, object>> expr = x => x.Name;
 
             var member = expr.GetMemberName();
 
             Assert.AreEqual(nameof(Person.Name), member);
         }
     }
-
-
-
 }

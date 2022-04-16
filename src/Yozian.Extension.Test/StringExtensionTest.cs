@@ -11,7 +11,7 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_ToEnum()
         {
             var category = Category.Ship.ToString().ToEnum<Category>();
@@ -19,7 +19,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(Category.Ship, category);
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_ToEnum_Null()
         {
             var category = "ShipX".ToEnum<Category>();
@@ -27,13 +27,16 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(Category.Car, category);
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_ToEnum_NullWithOutDefatul()
         {
-            Assert.Throws(typeof(ArgumentException), () =>
-            {
-                var category = "ShipX".ToEnum<Category>(false);
-            });
+            Assert.Throws(
+                typeof(ArgumentException),
+                () =>
+                {
+                    var category = "ShipX".ToEnum<Category>(false);
+                }
+            );
         }
 
 
@@ -55,7 +58,6 @@ namespace Yozian.Extension.Test
             {
                 Assert.AreEqual(Math.Min(len, text.Length), result.Length);
             }
-
         }
 
 
@@ -83,10 +85,5 @@ namespace Yozian.Extension.Test
 
             Assert.AreEqual(text, decodedText);
         }
-
-
     }
-
-
-
 }

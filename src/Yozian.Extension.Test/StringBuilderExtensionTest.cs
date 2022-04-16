@@ -1,7 +1,5 @@
-using System;
 using System.Text;
 using NUnit.Framework;
-using Yozian.Extension.Test.TestMaterial;
 
 namespace Yozian.Extension.Test
 {
@@ -12,7 +10,7 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_AppendWhenFalse()
         {
             var sb = new StringBuilder();
@@ -22,7 +20,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(string.Empty, sb.ToString());
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_AppendWhenTrue()
         {
             var sb = new StringBuilder();
@@ -32,7 +30,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(template, sb.ToString());
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_AppendWhenFalseWithArgs()
         {
             var sb = new StringBuilder();
@@ -42,7 +40,7 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(string.Empty, sb.ToString());
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_AppendWhenTrueWithArgs()
         {
             var sb = new StringBuilder();

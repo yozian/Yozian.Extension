@@ -5,7 +5,6 @@ namespace Yozian.Extension.Test
 {
     public class IDictionaryExtensionTest
     {
-
         private readonly IDictionary<string, string> hash = new Dictionary<string, string>();
 
         [SetUp]
@@ -13,17 +12,17 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_SafeGet()
         {
             var key = "Key";
-            var str = hash.SafeGet(key);
+            var str = this.hash.SafeGet(key);
 
             Assert.AreEqual(null, str);
 
-            hash.Add(key, "val");
+            this.hash.Add(key, "val");
 
-            Assert.AreEqual("val", hash.SafeGet(key));
+            Assert.AreEqual("val", this.hash.SafeGet(key));
         }
     }
 }

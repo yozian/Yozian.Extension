@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Yozian.Extension.Test.TestMaterial
+﻿namespace Yozian.Extension.Test.TestMaterial
 {
     internal enum Category
     {
@@ -10,6 +6,5 @@ namespace Yozian.Extension.Test.TestMaterial
         Train,
         AirCraft,
         Ship
-
     }
 }

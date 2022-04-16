@@ -10,7 +10,7 @@ namespace Yozian.Extension.Test
         {
         }
 
-        [TestCase()]
+        [TestCase]
         public void Test_SafeToString()
         {
             object obj = null;
@@ -19,7 +19,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_ConvertAll()
         {
             var man = new Person()
@@ -33,7 +33,7 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
+        [TestCase]
         public void Test_ShallowClone()
         {
             var man = new Person()
@@ -47,6 +47,5 @@ namespace Yozian.Extension.Test
 
             Assert.AreNotEqual(man.GetHashCode(), cloneMan.GetHashCode());
         }
-
     }
 }

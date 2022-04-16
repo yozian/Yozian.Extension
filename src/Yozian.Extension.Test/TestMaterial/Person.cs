@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Yozian.Extension.Test.TestMaterial
 {
     internal class Person
     {
-
         public string Name { get; set; }
 
         public int Age { get; set; }
