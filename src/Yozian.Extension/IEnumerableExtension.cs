@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -71,24 +71,6 @@ namespace Yozian.Extension
         )
         {
             return string.Join(separator, @this.Select(converter));
-        }
-
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
-            this IEnumerable<TSource> @this,
-            Func<TSource, TKey> targetProperty
-        )
-        {
-            var seenKeys = new HashSet<TKey>();
-
-            foreach (var element in @this)
-            {
-                var keys = targetProperty(element);
-
-                if (seenKeys.Add(keys))
-                {
-                    yield return element;
-                }
-            }
         }
 
         /// <summary>
