@@ -62,40 +62,6 @@ namespace Yozian.Extension.Test
         }
 
 
-        [TestCase()]
-        public void Test_DistinctBy()
-        {
-            var list = new List<Person>()
-            {
-                new Person()
-                {
-                    Name = "A",
-                    Age = 10
-                },
-                new Person()
-                {
-                    Name = "B",
-                    Age = 10
-                },
-                new Person()
-                {
-                    Name = "C",
-                    Age = 11
-                },
-                new Person()
-                {
-                    Name = "C",
-                    Age = 11
-                },
-            };
-
-            var byName = list.DistinctBy(x => x.Name);
-            Assert.AreEqual(3, byName.Count());
-
-            var byAge = list.DistinctBy(x => x.Age);
-            Assert.AreEqual(2, byAge.Count());
-        }
-
 
         // [TestCase(3)]
         // [TestCase(5)]
