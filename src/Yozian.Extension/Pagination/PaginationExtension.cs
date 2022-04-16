@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Yozian.Extension.Pagination
@@ -51,6 +52,7 @@ namespace Yozian.Extension.Pagination
         /// <param name="page"></param>
         /// <param name="size"></param>
         /// <param name="converter"></param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TOutput"></typeparam>
         /// <returns></returns>
@@ -58,10 +60,11 @@ namespace Yozian.Extension.Pagination
             this IQueryable<TSource> @this,
             int? page,
             int? size,
-            Func<TSource, TOutput> converter = null
+            Func<TSource, TOutput> converter = null,
+            CancellationToken cancellationToken = default
         )
         {
-            return Task.Run(() => ToPagination(@this, page, size, converter));
+            return Task.Run(() => ToPagination(@this, page, size, converter), cancellationToken);
         }
 
         /// <summary>
@@ -70,15 +73,17 @@ namespace Yozian.Extension.Pagination
         /// <param name="this"></param>
         /// <param name="page"></param>
         /// <param name="size"></param>
+        /// <param name="cancellationToken"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static Task<Paging<T>> ToPaginationAsync<T>(
             this IQueryable<T> @this,
             int? page,
-            int? size
+            int? size,
+            CancellationToken cancellationToken = default
         )
         {
-            return Task.Run(() => ToPagination(@this, page, size));
+            return Task.Run(() => ToPagination(@this, page, size), cancellationToken);
         }
 
 
