@@ -28,8 +28,6 @@ You could take a look into test project to get examples with following list!
 
     >FlattenToString
 
-    >DistinctBy
-
 
 * [IQueryableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IQueryableExtensionTest.cs)
 
@@ -49,7 +47,7 @@ You could take a look into test project to get examples with following list!
 
     >LimitLength
 
-    >Repeate
+    >Repeat
 
 * [PaginationExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//PaginationExtensionTest.cs)
 
