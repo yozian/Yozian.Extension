@@ -170,6 +170,17 @@ namespace Yozian.Extension
         {
             return @this.Except(targets, new GenericComparer<T>(comparer, hashCode));
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="this"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> @this)
+        {
+            return null == @this || !@this.Any();
+        }
     }
 
     internal class Pagination<T>

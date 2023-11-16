@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Yozian.Extension.CollectionDto;
@@ -18,7 +19,12 @@ namespace Yozian.Extension.Test
         {
             var list = Enumerable.Range(1, 5);
 
-            list.ForEach(x => { Console.Write(x); });
+            list.ForEach(
+                x =>
+                {
+                    Console.Write(x);
+                }
+            );
 
             Assert.Pass();
         }
@@ -29,7 +35,12 @@ namespace Yozian.Extension.Test
         {
             var list = Enumerable.Range(1, 5);
 
-            list.ForEach((x, index) => { Console.Write($"{x}({index})"); });
+            list.ForEach(
+                (x, index) =>
+                {
+                    Console.Write($"{x}({index})");
+                }
+            );
 
             Assert.Pass();
         }
@@ -158,6 +169,23 @@ namespace Yozian.Extension.Test
             Assert.AreEqual(5, results.Count());
 
             Assert.AreEqual(results.Last().Name, "5");
+        }
+
+
+        [TestCase]
+        public void Test_IsNullOrEmpty()
+        {
+            var source = new List<string>();
+
+            Assert.IsTrue(source.IsNullOrEmpty());
+
+            source.Add(string.Empty);
+
+            Assert.IsFalse(source.IsNullOrEmpty());
+
+            source = null;
+
+            Assert.IsTrue(source.IsNullOrEmpty());
         }
     }
 }
