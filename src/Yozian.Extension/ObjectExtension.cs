@@ -16,7 +16,7 @@ namespace Yozian.Extension
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="@this"></param>
-        /// <param name="expression"></param>
+        /// <param name="transform"></param>
         /// <returns></returns>
         public static T ConvertAll<T, Target>(this T @this, Func<Target, Target> transform)
             where T : class

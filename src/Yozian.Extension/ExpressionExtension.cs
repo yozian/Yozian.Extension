@@ -7,8 +7,7 @@ namespace Yozian.Extension
     {
         public static string GetMemberName(this LambdaExpression memberSelector)
         {
-            Func<Expression, string> nameSelector = null; //recursive func
-            nameSelector = e =>                           //or move the entire thing to a separate recursive method
+            string nameSelector(Expression e)
             {
                 switch (e.NodeType)
                 {
@@ -34,7 +33,8 @@ namespace Yozian.Extension
                     default:
                         throw new Exception("Not a proper member selector");
                 }
-            };
+            }
+
 
             return nameSelector(memberSelector.Body);
         }

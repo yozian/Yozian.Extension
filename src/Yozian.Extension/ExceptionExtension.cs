@@ -25,11 +25,10 @@ namespace Yozian.Extension
 
             if (null != filter)
             {
-                frames = frames.Where(filter);
+                frames = frames?.Where(filter);
             }
 
-            frames
-               .Select(
+            frames?.Select(
                     frame => new
                     {
                         FileName = frame.GetFileName(),

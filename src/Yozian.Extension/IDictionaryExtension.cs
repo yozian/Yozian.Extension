@@ -9,9 +9,9 @@ namespace Yozian.Extension
             TKey key
         )
         {
-            if (@this.ContainsKey(key))
+            if (@this.TryGetValue(key, out var value))
             {
-                return @this[key];
+                return value;
             }
 
             return default(TValue);

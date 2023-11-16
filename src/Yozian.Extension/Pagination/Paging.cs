@@ -28,7 +28,7 @@ namespace Yozian.Extension.Pagination
             this.CurrentPage = page ?? 1;
             this.Size = size ?? 10;
 
-            this.fetchPage(source, this.CurrentPage, this.Size);
+            this.FetchPage(source, this.CurrentPage, this.Size);
         }
 
         private Paging(int totalCount, int pageCount, int currentPage, int size, IEnumerable<T> records)
@@ -41,10 +41,10 @@ namespace Yozian.Extension.Pagination
         }
 
 
-        protected void fetchPage(IQueryable<T> source, int page, int size)
+        protected void FetchPage(IQueryable<T> source, int page, int size)
         {
             this.TotalCount = source.Count();
-            this.PageCount = calculatePageCount(size, this.TotalCount);
+            this.PageCount = CalculatePageCount(size, this.TotalCount);
             this.CurrentPage = page >= this.PageCount ? this.PageCount : page;
             this.CurrentPage = this.CurrentPage < 1 ? 1 : this.CurrentPage;
             this.Size = size;
@@ -79,7 +79,7 @@ namespace Yozian.Extension.Pagination
             );
         }
 
-        private static int calculatePageCount(int limits, int totalCount)
+        private static int CalculatePageCount(int limits, int totalCount)
         {
             if (limits == 0)
             {

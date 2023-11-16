@@ -48,10 +48,10 @@ namespace Yozian.Extension.Pagination
             this.Records = records;
 
             //
-            this.calculateNavigation(totalCount, pageCount, currentPage, pageSize);
+            this.CalculateNavigation(totalCount, pageCount, currentPage, pageSize);
         }
 
-        private void calculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
+        private void CalculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
         {
             var isTimesOfDisplayPagesCount = currentPage % pageSize == 0;
 
