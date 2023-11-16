@@ -85,25 +85,25 @@ namespace Yozian.Extension.Pagination
         /// <summary>
         /// indicate that has previous pages of the navigation
         ///
-        /// ex :   <<  6,7,8,9,10 >>  -> there are << 1,2,3,4,5 >>
+        /// ex :   [  6,7,8,9,10 ]  -> there are [ 1,2,3,4,5 ]
         /// </summary>
         public bool HasPreviousPages { get; private set; }
 
         /// <summary>
         /// indicate that has more page numbers in the next of the navigation
-        /// ex :   <<  6,7,8,9,10 >>  -> there are << 11,21,13,14,15 >> or more page
+        /// ex :   [  6,7,8,9,10 ]  -> there are [ 11,21,13,14,15 ] or more page
         /// </summary>
         public bool HasNextPages { get; private set; }
 
         /// <summary>
         ///
-        /// ex: current navigation <<  6,7,8,9,10 >>,  -> will be [1]
+        /// ex: current navigation [  6,7,8,9,10 ],  -> will be [1]
         /// </summary>
         public int PreviousLastPageNo { get; private set; }
 
         /// <summary>
         ///
-        /// ex: current navigation <<  6,7,8,9,10 >>,  -> will be [11] (if has more pages)
+        /// ex: current navigation [  6,7,8,9,10 ],  -> will be [11] (if has more pages)
         /// </summary>
         public int NextStartPageNo { get; private set; }
 

@@ -15,7 +15,7 @@ namespace Yozian.Extension
         /// apply the expression to all TTarget properties
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="@this"></param>
+        /// <param name="this"></param>
         /// <param name="transform"></param>
         /// <returns></returns>
         public static T ConvertAll<T, TTarget>(this T @this, Func<TTarget, TTarget> transform)
