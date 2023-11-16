@@ -12,23 +12,23 @@ namespace Yozian.Extension
         }
 
         /// <summary>
-        /// apply the expression to all <Target> properties
+        /// apply the expression to all TTarget properties
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="@this"></param>
         /// <param name="transform"></param>
         /// <returns></returns>
-        public static T ConvertAll<T, Target>(this T @this, Func<Target, Target> transform)
+        public static T ConvertAll<T, TTarget>(this T @this, Func<TTarget, TTarget> transform)
             where T : class
         {
-            Contract.Ensures(Contract.Result<Target>() != null);
-            var propinfo = @this.GetType()
+            Contract.Ensures(Contract.Result<TTarget>() != null);
+            var propInfo = @this.GetType()
                .GetProperties()
-               .Where(x => x.PropertyType == typeof(Target));
+               .Where(x => x.PropertyType == typeof(TTarget));
 
-            foreach (var prop in propinfo)
+            foreach (var prop in propInfo)
             {
-                var currentVal = (Target) prop.GetValue(@this, null);
+                var currentVal = (TTarget) prop.GetValue(@this, null);
                 var newVal = transform(currentVal);
                 prop.SetValue(@this, newVal, null);
             }
