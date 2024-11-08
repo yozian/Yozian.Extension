@@ -4,16 +4,29 @@ using System.Linq;
 
 namespace Yozian.Extension.Pagination
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Paging<T>
     {
+        /// <summary>
+        /// Total Records Count
+        /// </summary>
         public int TotalCount { get; internal set; }
 
+        /// <summary>
+        /// Total Page Count
+        /// </summary>
         public int PageCount { get; internal set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int CurrentPage { get; internal set; }
 
         /// <summary>
-        /// Maximum
+        /// Records' Size Per Page
         /// </summary>
         public int Size { get; internal set; }
 
@@ -50,23 +63,29 @@ namespace Yozian.Extension.Pagination
             this.Size = size;
 
             this.Records = source
-               .Skip((this.CurrentPage - 1) * this.Size)
-               .Take(this.Size)
-               .ToList();
+                .Skip((this.CurrentPage - 1) * this.Size)
+                .Take(this.Size)
+                .ToList();
         }
 
         public Paging<TOut> MapTo<TOut>(Func<T, TOut> converter)
         {
             var data = this.Records.Select(converter).ToList();
 
-            return new Paging<TOut>(this.TotalCount, this.PageCount, this.CurrentPage, this.Size, data);
+            return new Paging<TOut>(
+                this.TotalCount,
+                this.PageCount,
+                this.CurrentPage,
+                this.Size,
+                data
+            );
         }
 
         public Page<T> ToPage(int navigatorPageSize)
         {
-            if (1 > navigatorPageSize)
+            if (navigatorPageSize <= 0)
             {
-                throw new ArgumentException("navigatorPageSize should be greater than 0");
+                throw new ArgumentException("navigatorPageSize should be greater than 0!");
             }
 
             return new Page<T>(

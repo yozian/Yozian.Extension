@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Yozian.Extension.CollectionDto
+namespace Yozian.Extension.Dtos
 {
     /// <summary>
     ///  Note that Object HashCode is ignored here to be compared!
