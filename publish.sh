@@ -1,12 +1,9 @@
 #!/bin/bash
 version=$1
-cd nuget
 
 if [ "$version" == "" ];then
    echo "version should be provided!"
    exit;
 fi
 
-nuget push Yozian.Extension.$1.nupkg  -source https://api.nuget.org/v3/index.json
-
-cd ..
+dotnet nuget push "nuget/Yozian.Extension.$version.nupkg" --source https://api.nuget.org/v3/index.json

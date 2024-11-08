@@ -13,13 +13,9 @@ echo "pack with commit: $commit"
 # change commit hash
 sed -i -e "s/commit=\"*\"/commit=\"$commit\"/g" nuget/Yozian.Extension.nuspec
 
-cd nuget
 
-nuget pack -version $1
-
-cd ..
+dotnet pack src/Yozian.Extension/Yozian.Extension.csproj -p:PackageVersion=$version -o nuget
 
 
 # recover
 git checkout nuget/Yozian.Extension.nuspec
-
