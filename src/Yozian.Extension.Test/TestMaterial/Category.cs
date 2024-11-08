@@ -1,10 +1,9 @@
-﻿namespace Yozian.Extension.Test.TestMaterial
+﻿namespace Yozian.Extension.Test.TestMaterial;
+
+internal enum Category
 {
-    internal enum Category
-    {
-        Car,
-        Train,
-        AirCraft,
-        Ship
-    }
+    Car,
+    Train,
+    AirCraft,
+    Ship
 }

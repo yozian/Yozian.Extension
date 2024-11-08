@@ -1,17 +1,16 @@
 ﻿using System;
 
-namespace Yozian.Extension.Test.TestMaterial
+namespace Yozian.Extension.Test.TestMaterial;
+
+internal class Person
 {
-    internal class Person
+    public string Name { get; set; }
+
+    public int Age { get; set; }
+
+
+    public void Walk()
     {
-        public string Name { get; set; }
-
-        public int Age { get; set; }
-
-
-        public void Walk()
-        {
-            throw new Exception("Opps", new Exception("InnerException-Opps"));
-        }
+        throw new Exception("Opps", new Exception("InnerException-Opps"));
     }
 }

@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace Yozian.Extension.Test;

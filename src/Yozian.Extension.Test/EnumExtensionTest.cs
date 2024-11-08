@@ -1,33 +1,32 @@
 using System;
 using NUnit.Framework;
 
-namespace Yozian.Extension.Test
+namespace Yozian.Extension.Test;
+
+[TestFixture]
+public class EnumExtensionTest
 {
-    [TestFixture]
-    public class EnumExtensionTest
+    public class ActualNameAttribute : Attribute
     {
-        public class ActualNameAttribute : Attribute
-        {
-            public string Name { get; set; }
-        }
+        public string Name { get; set; }
+    }
 
-        public enum TestEnum
-        {
-            [ActualName(Name = "Secrete")]
-            SpiderMan
-        }
+    public enum TestEnum
+    {
+        [ActualName(Name = "Secrete")]
+        SpiderMan
+    }
 
 
-        [Test]
-        public void ShouldRetrieveAttributeValueSuccess()
-        {
-            var en = TestEnum.SpiderMan;
+    [Test]
+    public void ShouldRetrieveAttributeValueSuccess()
+    {
+        var en = TestEnum.SpiderMan;
 
-            var attr = en.GetAttributeOf<ActualNameAttribute>();
+        var attr = en.GetAttributeOf<ActualNameAttribute>();
 
-            Assert.NotNull(attr);
+        Assert.NotNull(attr);
 
-            Assert.AreEqual("Secrete", attr.Name);
-        }
+        Assert.AreEqual("Secrete", attr.Name);
     }
 }

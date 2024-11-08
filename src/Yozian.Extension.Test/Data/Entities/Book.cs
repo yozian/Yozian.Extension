@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Yozian.Extension.Test.Data.Entities
+namespace Yozian.Extension.Test.Data.Entities;
+
+public class Book
 {
-    public class Book
-    {
-        [Key]
-        public int Id { get; set; }
+    [Key]
+    public int Id { get; set; }
 
 
-        public string Name { get; set; }
-    }
+    public string Name { get; set; }
 }
