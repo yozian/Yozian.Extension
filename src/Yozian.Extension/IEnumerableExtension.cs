@@ -241,6 +241,42 @@ public static class IEnumerableExtension
 
         return totalCount;
     }
+    
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="outer"></param>
+    /// <param name="inner"></param>
+    /// <param name="outerKeySelector"></param>
+    /// <param name="innerKeySelector"></param>
+    /// <param name="resultSelector"></param>
+    /// <typeparam name="TOuter"></typeparam>
+    /// <typeparam name="TInner"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    public static IEnumerable<TResult> LeftOuterJoin<TOuter, TInner, TKey, TResult>(
+        this IEnumerable<TOuter> outer,
+        IEnumerable<TInner> inner,
+        Func<TOuter, TKey> outerKeySelector,
+        Func<TInner, TKey> innerKeySelector,
+        Func<TOuter, TInner, TResult> resultSelector
+    )
+    {
+        return outer
+            .GroupJoin(
+                inner,
+                outerKeySelector,
+                innerKeySelector,
+                (a, b) => new
+                {
+                    a,
+                    b
+                }
+            )
+            .SelectMany(x => x.b.DefaultIfEmpty(), (x, b) => resultSelector(x.a, b));
+    }
 }
 
 internal class Pagination<T>
