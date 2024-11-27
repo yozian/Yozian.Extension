@@ -115,7 +115,7 @@ public class ICollectionExtensionTest
     }
 
     [TestCase]
-    public void Test_TwoListsDiffer()
+    public void Test_TwoValueTypeListsDiffer()
     {
         var listA = new List<int>
         {
@@ -136,6 +136,43 @@ public class ICollectionExtensionTest
         };
 
         var differResult = listA.DifferFrom(listB, new GenericComparer<int>((a, b) => a == b));
+
+        // asserts
+        Assert.AreEqual(3, differResult.SourceMissingItems.Count);
+        Assert.AreEqual(3, differResult.TargetMissingItems.Count);
+        Assert.AreEqual(2, differResult.MatchedItems.Count);
+    }
+
+
+    [TestCase]
+    public void Test_TwoRefTypeListsDiffer()
+    {
+        var listA = Enumerable
+            .Range(1, 5)
+            .Select(
+                i => new Book
+                {
+                    Id = i,
+                    Name = $"Book {i}"
+                }
+            )
+            .ToList();
+
+        var listB = Enumerable
+            .Range(4, 5)
+            .Select(
+                i => new Book
+                {
+                    Id = i,
+                    Name = $"Book {i}"
+                }
+            )
+            .ToList();
+
+        var differResult = listA.DifferFrom(
+            listB,
+            new GenericComparer<Book>((a, b) => a.Id == b.Id)
+        );
 
         // asserts
         Assert.AreEqual(3, differResult.SourceMissingItems.Count);

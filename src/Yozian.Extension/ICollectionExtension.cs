@@ -78,6 +78,12 @@ public static class ICollectionExtension
                 {
                     var y = target.FirstOrDefault(j => comparer.Equals(x, j));
 
+                    // null value should treat as different
+                    if (y == null)
+                    {
+                        return null;
+                    }
+
                     // fix some value type would not be null, or have the default value, so we should use the comparer to compare
                     return comparer.Equals(x, y) ? new CollectionDifference<T>.Difference(x, y) : null;
                 }
