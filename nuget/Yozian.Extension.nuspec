@@ -1,20 +1,28 @@
 <?xml version="1.0"?>
-<package >
-  <metadata>
-    <id>Yozian.Extension</id>
-    <version>0.0.0</version>
-    <authors>yozian</authors>
-    <owners>yozian</owners>
-    <license type="expression">MIT</license>
-    <projectUrl>https://github.com/yozian/Yozian.Extension</projectUrl>
-    <icon/>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Useful extension methods for primitive objects and interfaces</description>
-    <copyright>Copyright Ⓒ yozian 2019</copyright>
-    <tags>Pagination, Useful Extension Methods</tags>
-    <dependencies>
-      <group targetFramework=".NETStandard2.0" />
-    </dependencies>
-    <repository type="git" commit="" url="https://github.com/yozian/Yozian.Extension"/>
-  </metadata>
+<package>
+    <metadata>
+        <id>Yozian.Extension</id>
+        <version>0.0.0</version>
+        <authors>yozian</authors>
+        <owners>yozian</owners>
+        <license type="expression">MIT</license>
+        <projectUrl>https://github.com/yozian/Yozian.Extension</projectUrl>
+        <icon/>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>
+            Useful extension methods for primitive objects and interfaces,
+            &#xA;
+            Chain Linq Conditional Where Query, Linq Pagination (support for EF core paging query)
+            &#xA;
+            Batch paging consume the IProducerConsumerCollection
+            &#xA;
+            Dump Exception stacktrace with formatted message
+        </description>
+        <copyright>Copyright Ⓒ yozian 2019</copyright>
+        <tags>Useful Extension Methods, Chain Linq Conditional Where Query, Pagination</tags>
+        <dependencies>
+            <group targetFramework=".NETStandard2.0"/>
+        </dependencies>
+        <repository type="git" commit="" url="https://github.com/yozian/Yozian.Extension"/>
+    </metadata>
 </package>
