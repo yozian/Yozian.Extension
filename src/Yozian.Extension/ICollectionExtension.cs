@@ -59,7 +59,7 @@ public static class ICollectionExtension
 
 
     /// <summary>
-    /// the result is considered by the source side
+    /// the result is considered by the source, and all the null items will be ignored and filtered
     /// </summary>
     /// <param name="this"></param>
     /// <param name="target"></param>
@@ -72,11 +72,14 @@ public static class ICollectionExtension
         IEqualityComparer<T> comparer
     )
     {
-        var equalItems = @this
+        var source = @this.Where(x => x != null).ToList();
+        var destTarget = target.Where(x => x != null);
+
+        var equalItems = source
             .Select(
                 x =>
                 {
-                    var y = target.FirstOrDefault(j => comparer.Equals(x, j));
+                    var y = destTarget.FirstOrDefault(j => comparer.Equals(x, j));
 
                     // null value should treat as different
                     if (y == null)
@@ -91,48 +94,15 @@ public static class ICollectionExtension
             .Where(x => x != null)
             .ToList();
 
-        var sourceMissingItems = target.Except(@this, comparer)
+        var sourceMissingItems = destTarget.Except(@this, comparer)
             .ToList();
 
-        var targetMissingItems = @this.Except(target, comparer)
+        var targetMissingItems = source.Except(target, comparer)
             .ToList();
 
         return new CollectionDifference<T>(equalItems, sourceMissingItems, targetMissingItems);
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="outer"></param>
-    /// <param name="inner"></param>
-    /// <param name="outerKeySelector"></param>
-    /// <param name="innerKeySelector"></param>
-    /// <param name="resultSelector"></param>
-    /// <typeparam name="TOuter"></typeparam>
-    /// <typeparam name="TInner"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TResult"></typeparam>
-    /// <returns></returns>
-    public static IEnumerable<TResult> LeftOuterJoin<TOuter, TInner, TKey, TResult>(
-        this IEnumerable<TOuter> outer,
-        IEnumerable<TInner> inner,
-        Func<TOuter, TKey> outerKeySelector,
-        Func<TInner, TKey> innerKeySelector,
-        Func<TOuter, TInner, TResult> resultSelector
-    )
-    {
-        return outer
-            .GroupJoin(
-                inner,
-                outerKeySelector,
-                innerKeySelector,
-                (a, b) => new
-                {
-                    a,
-                    b
-                }
-            )
-            .SelectMany(x => x.b.DefaultIfEmpty(), (x, b) => resultSelector(x.a, b));
-    }
+   
 }
