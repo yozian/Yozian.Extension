@@ -6,4 +6,4 @@ if [ "$version" == "" ];then
    exit;
 fi
 
-dotnet nuget push "nuget/Yozian.Extension.$version.nupkg" --source https://api.nuget.org/v3/index.json
+dotnet nuget push "nuget/Yozian.Extension.$version.nupkg" --source https://api.nuget.org/v3/index.json --api-key $NUGET_API_KEY
