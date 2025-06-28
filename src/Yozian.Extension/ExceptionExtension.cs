@@ -38,7 +38,6 @@ public static class ExceptionExtension
                     Class = frame.GetMethod().DeclaringType
                 }
             )
-            .Reverse()
             .ForEach(
                 info =>
                 {
