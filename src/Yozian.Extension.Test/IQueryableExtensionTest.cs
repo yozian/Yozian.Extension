@@ -31,4 +31,36 @@ public class IQueryableExtensionTest
             Assert.AreEqual(count, list.Count);
         }
     }
+
+    [Test]
+    public void Test_WhereWhenWithFuncCondition()
+    {
+        var invoked = false;
+        var condition = () =>
+        {
+            invoked = true;
+
+            return false;
+        };
+
+        var count = 20;
+        var list = Enumerable
+            .Range(1, count)
+            .AsQueryable()
+            .WhereWhen(condition, x => x <= 5)
+            .ToList();
+
+        Assert.IsTrue(invoked);
+        Assert.AreEqual(count, list.Count);
+
+        condition = () => true;
+
+        var filtered = Enumerable
+            .Range(1, count)
+            .AsQueryable()
+            .WhereWhen(condition, x => x <= 5)
+            .ToList();
+
+        Assert.AreEqual(5, filtered.Count);
+    }
 }

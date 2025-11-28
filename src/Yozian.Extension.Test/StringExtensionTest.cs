@@ -27,6 +27,16 @@ public class StringExtensionTest
         Assert.AreEqual(Category.Car, category);
     }
 
+    [Test]
+    public void Test_ToEnum_WithNullInput()
+    {
+        string categoryName = null;
+
+        var category = categoryName.ToEnum<Category>();
+
+        Assert.AreEqual(default(Category), category);
+    }
+
     [TestCase]
     public void Test_ToEnum_NullWithOutDefatul()
     {
@@ -84,5 +94,31 @@ public class StringExtensionTest
         var decodedText = encodedText.DecodeBase64Text();
 
         Assert.AreEqual(text, decodedText);
+    }
+
+    [Test]
+    public void Test_Base64Encode_WithNullOrEmpty()
+    {
+        string text = null;
+        Assert.IsNull(text.EncodeToBase64());
+
+        text = string.Empty;
+        Assert.AreEqual(string.Empty, text.EncodeToBase64());
+    }
+
+    [Test]
+    public void Test_Base64Decode_WithNullOrEmpty()
+    {
+        string text = null;
+        Assert.IsNull(text.DecodeBase64Text());
+
+        text = string.Empty;
+        Assert.AreEqual(string.Empty, text.DecodeBase64Text());
+    }
+
+    [Test]
+    public void Test_DecodeBase64Text_WithInvalidInput()
+    {
+        Assert.Throws<FormatException>(() => "Invalid$".DecodeBase64Text());
     }
 }

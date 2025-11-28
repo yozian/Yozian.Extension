@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,5 +42,25 @@ public class IProducerConsumerCollectionExtensionTest
 
         // consumed
         Assert.AreEqual(seedCount, total);
+    }
+
+    [Test]
+    public void Test_BatchConsumeAsync_InvalidBatchSize()
+    {
+        var queue = new ConcurrentQueue<int>();
+
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+            await queue.BatchConsumeAsync(0, (items, token) => Task.CompletedTask)
+        );
+    }
+
+    [Test]
+    public void Test_BatchConsumeAsync_NullConsumer()
+    {
+        var queue = new ConcurrentQueue<int>();
+
+        Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await queue.BatchConsumeAsync(1, null)
+        );
     }
 }

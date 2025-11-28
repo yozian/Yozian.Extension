@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using NUnit.Framework;
 
@@ -65,5 +66,37 @@ public class StringBuilderExtensionTest
             ),
             sb.ToString()
         );
+    }
+
+    [Test]
+    public void Test_AppendLineWhenTrue()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLineWhen(true, "line");
+
+        Assert.AreEqual($"line{Environment.NewLine}", sb.ToString());
+    }
+
+    [Test]
+    public void Test_AppendLineWhenFalse()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLineWhen(false, "line");
+
+        Assert.AreEqual(string.Empty, sb.ToString());
+    }
+
+    [Test]
+    public void Test_AppendLineWhenTrueWithArgs()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLineWhen(
+            true,
+            "{0}/{1}",
+            "a",
+            "b"
+        );
+
+        Assert.AreEqual($"a/b{Environment.NewLine}", sb.ToString());
     }
 }

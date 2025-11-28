@@ -15,6 +15,8 @@ public class EnumExtensionTest
     {
         [ActualName(Name = "Secrete")]
         SpiderMan,
+
+        IronMan,
     }
 
 
@@ -28,5 +30,13 @@ public class EnumExtensionTest
         Assert.NotNull(attr);
 
         Assert.AreEqual("Secrete", attr.Name);
+    }
+
+    [Test]
+    public void ShouldReturnNullWhenAttributeMissing()
+    {
+        var attr = TestEnum.IronMan.GetAttributeOf<ActualNameAttribute>();
+
+        Assert.IsNull(attr);
     }
 }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Yozian.Extension.Dtos;
 using Yozian.Extension.Test.TestMaterial;
@@ -28,6 +30,35 @@ public class IEnumerableExtensionTest
         Assert.Pass();
     }
 
+    [Test]
+    public void Test_ForEach_AllowsMutationWhenUsingClone()
+    {
+        var list = new List<int>
+        {
+            1,
+            2,
+        };
+
+        list.ForEach(
+            item =>
+            {
+                if (item == 1)
+                {
+                    list.Remove(item);
+                }
+            },
+            true
+        );
+
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                2,
+            },
+            list
+        );
+    }
+
 
     [TestCase]
     public void Test_ForEachWithIndex()
@@ -41,6 +72,57 @@ public class IEnumerableExtensionTest
         );
 
         Assert.Pass();
+    }
+
+    [Test]
+    public void Test_ForEachWithIndex_SequentialIndexes()
+    {
+        var list = new List<string>
+        {
+            "a",
+            "b",
+        };
+
+        var indexes = new List<int>();
+
+        list.ForEach((value, index) => { indexes.Add(index); });
+
+        CollectionAssert.AreEqual(
+            new[]
+            {
+                0,
+                1,
+            },
+            indexes
+        );
+    }
+
+    [Test]
+    public async Task Test_ForEachAsync()
+    {
+        var list = Enumerable.Range(1, 3).ToList();
+        var processed = new List<int>();
+
+        await list.ForEachAsync(async (
+                value,
+                index,
+                token
+            ) =>
+            {
+                await Task.Delay(1, token);
+                processed.Add(value + index);
+            }
+        );
+
+        CollectionAssert.AreEqual(
+            new[]
+            {
+                1,
+                3,
+                5,
+            },
+            processed
+        );
     }
 
 
@@ -62,6 +144,36 @@ public class IEnumerableExtensionTest
         var result = list.FlattenToString(x => (x * 2).ToString());
 
         Assert.AreEqual("246810", result);
+    }
+
+    [Test]
+    public void Test_FlattenToStringWithConverterAndSeparator()
+    {
+        var list = new[]
+        {
+            1,
+            2,
+            3,
+        };
+
+        var result = list.FlattenToString(x => x.ToString(), "-");
+
+        Assert.AreEqual("1-2-3", result);
+    }
+
+    [Test]
+    public void Test_FlattenToStringWithSeparator()
+    {
+        var list = new[]
+        {
+            "a",
+            "b",
+            "c",
+        };
+
+        var result = list.FlattenToString(",");
+
+        Assert.AreEqual("a,b,c", result);
     }
 
 
@@ -116,6 +228,53 @@ public class IEnumerableExtensionTest
     }
 
 
+    [Test]
+    public void Test_ForEachPage_PerfectDivision()
+    {
+        var limits = 5;
+        var pageSizes = new List<int>();
+
+        Enumerable
+            .Range(1, 10)
+            .ForEachPage(
+                limits,
+                (data, page) => { pageSizes.Add(data.Count()); }
+            );
+
+        CollectionAssert.AreEqual(
+            new[]
+            {
+                5,
+                5,
+            },
+            pageSizes
+        );
+    }
+
+
+    [Test]
+    public void Test_ForEachPage_EmptySource()
+    {
+        var invoked = false;
+
+        Enumerable
+            .Empty<int>()
+            .ForEachPage(3, (_, _) => { invoked = true; });
+
+        Assert.False(invoked);
+    }
+
+
+    [Test]
+    public void Test_ForEachPage_InvalidLimits()
+    {
+        Assert.Throws<ArgumentException>(() => Enumerable
+            .Range(1, 5)
+            .ForEachPage(0, (_, _) => { })
+        );
+    }
+
+
     [TestCase]
     public void Test_ExceptGenericCompare()
     {
@@ -165,6 +324,61 @@ public class IEnumerableExtensionTest
         Assert.AreEqual(5, results.Count());
 
         Assert.AreEqual(results.Last().Name, "5");
+    }
+
+    [Test]
+    public async Task Test_BatchConsumeAsync()
+    {
+        var source = Enumerable.Range(1, 5);
+        var batches = new List<List<int>>();
+
+        var total = await source.BatchConsumeAsync(
+            2,
+            async (items, token) =>
+            {
+                batches.Add(new List<int>(items));
+                await Task.CompletedTask;
+            }
+        );
+
+        Assert.AreEqual(5, total);
+        Assert.AreEqual(3, batches.Count);
+        CollectionAssert.AreEqual(
+            new[]
+            {
+                1,
+                2,
+            },
+            batches.First()
+        );
+    }
+
+    [Test]
+    public void Test_BatchConsumeAsync_InvalidBatchSize()
+    {
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Enumerable.Range(1, 5)
+                .BatchConsumeAsync(0, (items, token) => Task.CompletedTask)
+        );
+    }
+
+    [Test]
+    public void Test_BatchConsumeAsync_NullConsumer()
+    {
+        Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Enumerable.Range(1, 5)
+                .BatchConsumeAsync(2, null)
+        );
+    }
+
+    [Test]
+    public void Test_BatchConsumeAsync_SourceIsProducerConsumerCollection()
+    {
+        var queue = new ConcurrentQueue<int>(Enumerable.Range(1, 3));
+
+        Assert.ThrowsAsync<ArgumentException>(async () =>
+            await (queue as IEnumerable<int>).BatchConsumeAsync(2, (items, token) => Task.CompletedTask)
+        );
     }
 
 

@@ -267,6 +267,27 @@ public class PaginationExtensionTest
 
 
     [TestCase]
+    public async Task Test_PaginationAsyncWithConverter()
+    {
+        var count = 10;
+        var size = 4;
+        var source = Enumerable
+            .Range(1, count)
+            .AsQueryable();
+
+        var result = await source.ToPaginationAsync(
+            1,
+            size,
+            x => $"#{x}"
+        );
+
+        Assert.AreEqual(count, result.TotalCount);
+        Assert.AreEqual(size, result.Records.Count());
+        Assert.AreEqual("#1", result.Records.First());
+    }
+
+
+    [TestCase]
     public void Test_ToPagination()
     {
         var count = 100;

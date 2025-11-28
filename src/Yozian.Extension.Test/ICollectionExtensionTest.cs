@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -49,6 +50,35 @@ public class ICollectionExtensionTest
         collection.RemoveWhen(true, 1);
 
         Assert.AreEqual(2, collection.Count);
+    }
+
+
+    [Test]
+    public void Test_AddRange()
+    {
+        ICollection<int> collection = new List<int>
+        {
+            1,
+        };
+
+        collection.AddRange(
+            new[]
+            {
+                2,
+                3,
+            }
+        );
+
+        Assert.AreEqual(3, collection.Count);
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                1,
+                2,
+                3,
+            },
+            collection
+        );
     }
 
 
@@ -174,6 +204,84 @@ public class ICollectionExtensionTest
         Assert.AreEqual(3, differResult.SourceMissingItems.Count);
         Assert.AreEqual(3, differResult.TargetMissingItems.Count);
         Assert.AreEqual(2, differResult.MatchedItems.Count);
+    }
+
+    [Test]
+    public void Test_TwoListsDifferWithFuncComparer()
+    {
+        var listA = new List<Book>
+        {
+            new Book
+            {
+                Id = 1,
+                Name = "Book 1",
+            },
+            new Book
+            {
+                Id = 2,
+                Name = "Book 2",
+            },
+        };
+
+        var listB = new List<Book>
+        {
+            new Book
+            {
+                Id = 2,
+                Name = "Book 2",
+            },
+            new Book
+            {
+                Id = 3,
+                Name = "Book 3",
+            },
+        };
+
+        var diff = listA.DifferFrom(
+            listB,
+            (left, right) => left.Id == right.Id
+        );
+
+        Assert.AreEqual(1, diff.MatchedItems.Count);
+        Assert.AreEqual(1, diff.SourceMissingItems.Count);
+        Assert.AreEqual(1, diff.TargetMissingItems.Count);
+    }
+
+    [Test]
+    public void Test_DifferFrom_IgnoresNullEntries()
+    {
+        var source = new List<string>
+        {
+            "A",
+            null,
+            "B",
+        };
+
+        var target = new List<string>
+        {
+            null,
+            "B",
+            "C",
+        };
+
+        var diff = source.DifferFrom(target, StringComparer.Ordinal);
+
+        Assert.AreEqual(1, diff.MatchedItems.Count);
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                "C",
+            },
+            diff.SourceMissingItems
+        );
+
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                "A",
+            },
+            diff.TargetMissingItems
+        );
     }
 
     [TestCase]
