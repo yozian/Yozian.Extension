@@ -9,9 +9,12 @@ namespace Yozian.Extension;
 /// </summary>
 public static class EnumExtension
 {
-    public static T GetAttributeOf<T>(this Enum value)
-        where T : Attribute
+    extension(Enum @this)
     {
-        return value.GetType().GetMember(value.ToString()).First().GetCustomAttribute<T>();
+        public T GetAttributeOf<T>()
+            where T : Attribute
+        {
+            return @this.GetType().GetMember(@this.ToString()).First().GetCustomAttribute<T>();
+        }
     }
 }

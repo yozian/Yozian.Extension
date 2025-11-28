@@ -7,18 +7,33 @@ namespace Yozian.Extension;
 /// </summary>
 public static class VersionExtension
 {
-    public static Version IncreaseMajor(this Version @this)
+    extension(Version @this)
     {
-        return new Version(@this.Major + 1, 0, 0);
-    }
+        public Version IncreaseMajor()
+        {
+            return new Version(
+                @this.Major + 1,
+                0,
+                0
+            );
+        }
 
-    public static Version IncreaseMinor(this Version @this)
-    {
-        return new Version(@this.Major, @this.Minor + 1, 0);
-    }
+        public Version IncreaseMinor()
+        {
+            return new Version(
+                @this.Major,
+                @this.Minor + 1,
+                0
+            );
+        }
 
-    public static Version IncreaseBuild(this Version @this)
-    {
-        return new Version(@this.Major, @this.Minor, @this.Build + 1);
+        public Version IncreaseBuild()
+        {
+            return new Version(
+                @this.Major,
+                @this.Minor,
+                @this.Build + 1
+            );
+        }
     }
 }

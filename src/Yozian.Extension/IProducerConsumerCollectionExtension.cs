@@ -12,49 +12,51 @@ public static class IProducerConsumerCollectionExtension
 {
     /// <summary>
     /// </summary>
-    /// <param name="this"></param>
-    /// <param name="batchSize">take out max amount each batch</param>
-    /// <param name="consumer"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static async Task<int> BatchConsumeAsync<T>(
-        this IProducerConsumerCollection<T> @this,
-        int batchSize,
-        Func<IList<T>, CancellationToken, Task> consumer,
-        CancellationToken cancellationToken = default
-    )
+    extension<T>(IProducerConsumerCollection<T> @this)
     {
-        if (batchSize <= 0)
+        /// <summary>
+        /// </summary>
+        /// <param name="batchSize">take out max amount each batch</param>
+        /// <param name="consumer"></param>
+        /// <returns></returns>
+        public async Task<int> BatchConsumeAsync(
+            int batchSize,
+            Func<IList<T>, CancellationToken, Task> consumer,
+            CancellationToken cancellationToken = default
+        )
         {
-            throw new ArgumentException("Batch size should be greater than 0!");
-        }
-
-        if (null == consumer)
-        {
-            throw new ArgumentNullException(nameof(consumer));
-        }
-
-        var totalCount = 0;
-
-        while (@this.Count > 0)
-        {
-            var items = new List<T>();
-
-            // Take out batch items to deal
-            while (@this.Count > 0 && items.Count < batchSize)
+            if (batchSize <= 0)
             {
-                if (@this.TryTake(out var item))
-                {
-                    items.Add(item);
-                }
+                throw new ArgumentException("Batch size should be greater than 0!");
             }
 
-            // execute
-            await consumer(items, cancellationToken);
+            if (null == consumer)
+            {
+                throw new ArgumentNullException(nameof(consumer));
+            }
 
-            totalCount += items.Count;
+            var totalCount = 0;
+
+            while (@this.Count > 0)
+            {
+                var items = new List<T>();
+
+                // Take out batch items to deal
+                while (@this.Count > 0 && items.Count < batchSize)
+                {
+                    if (@this.TryTake(out var item))
+                    {
+                        items.Add(item);
+                    }
+                }
+
+                // execute
+                await consumer(items, cancellationToken);
+
+                totalCount += items.Count;
+            }
+
+            return totalCount;
         }
-
-        return totalCount;
     }
 }

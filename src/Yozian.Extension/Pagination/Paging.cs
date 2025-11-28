@@ -41,10 +41,20 @@ public class Paging<T>
         this.CurrentPage = page ?? 1;
         this.Size = size ?? 10;
 
-        this.FetchPage(source, this.CurrentPage, this.Size);
+        this.FetchPage(
+            source,
+            this.CurrentPage,
+            this.Size
+        );
     }
 
-    private Paging(int totalCount, int pageCount, int currentPage, int size, IEnumerable<T> records)
+    private Paging(
+        int totalCount,
+        int pageCount,
+        int currentPage,
+        int size,
+        IEnumerable<T> records
+    )
     {
         this.TotalCount = totalCount;
         this.PageCount = pageCount;
@@ -54,7 +64,11 @@ public class Paging<T>
     }
 
 
-    protected void FetchPage(IQueryable<T> source, int page, int size)
+    protected void FetchPage(
+        IQueryable<T> source,
+        int page,
+        int size
+    )
     {
         this.TotalCount = source.Count();
         this.PageCount = CalculatePageCount(size, this.TotalCount);

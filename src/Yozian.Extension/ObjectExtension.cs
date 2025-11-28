@@ -6,44 +6,53 @@ namespace Yozian.Extension;
 
 public static class ObjectExtension
 {
-    public static string SafeToString(this object @this)
+    extension(object @this)
     {
-        return @this == null ? string.Empty : @this.ToString();
+        public string SafeToString()
+        {
+            return @this == null ? string.Empty : @this.ToString();
+        }
     }
 
     /// <summary>
     /// apply the expression to all TTarget properties
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="this"></param>
-    /// <param name="transform"></param>
-    /// <returns></returns>
-    public static T ConvertAll<T, TTarget>(this T @this, Func<TTarget, TTarget> transform)
+    extension<T>(T @this)
         where T : class
     {
-        Contract.Ensures(Contract.Result<TTarget>() != null);
-        var propInfo = @this.GetType()
-            .GetProperties()
-            .Where(x => x.PropertyType == typeof(TTarget));
-
-        foreach (var prop in propInfo)
+        public T ConvertAll<TTarget>(Func<TTarget, TTarget> transform)
         {
-            var currentVal = (TTarget)prop.GetValue(@this, null);
-            var newVal = transform(currentVal);
-            prop.SetValue(@this, newVal, null);
-        }
+            Contract.Ensures(Contract.Result<TTarget>() != null);
+            var propInfo = @this.GetType()
+                .GetProperties()
+                .Where(x => x.PropertyType == typeof(TTarget));
 
-        return @this;
+            foreach (var prop in propInfo)
+            {
+                var currentVal = (TTarget)prop.GetValue(@this, null);
+                var newVal = transform(currentVal);
+                prop.SetValue(
+                    @this,
+                    newVal,
+                    null
+                );
+            }
+
+            return @this;
+        }
     }
 
-    public static T ShallowClone<T>(this T @this)
+    extension<T>(T @this)
         where T : new()
     {
-        var obj = new T();
-        obj.GetType()
-            .GetProperties()
-            .ForEach(prop => { prop.SetValue(obj, prop.GetValue(@this)); });
+        public T ShallowClone()
+        {
+            var obj = new T();
+            obj.GetType()
+                .GetProperties()
+                .ForEach(prop => { prop.SetValue(obj, prop.GetValue(@this)); });
 
-        return obj;
+            return obj;
+        }
     }
 }

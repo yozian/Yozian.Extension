@@ -7,58 +7,59 @@ namespace Yozian.Extension;
 
 public static class ExceptionExtension
 {
-    public static string DumpDetail(this Exception ex, Func<StackFrame, bool> filter = null)
+    extension(Exception @this)
     {
-        var sb = new StringBuilder();
-        var st = new StackTrace(ex, true);
-        var innerException = ex;
-
-        while (innerException != null)
+        public string DumpDetail(Func<StackFrame, bool> filter = null)
         {
-            sb.AppendLine($"ErrorMessage: {innerException.Message}");
-            innerException = innerException.InnerException;
-        }
+            var sb = new StringBuilder();
+            var st = new StackTrace(@this, true);
+            var innerException = @this;
 
-        sb.AppendLine("--------StackTrace----------");
+            while (innerException != null)
+            {
+                sb.AppendLine($"ErrorMessage: {innerException.Message}");
+                innerException = innerException.InnerException;
+            }
 
-        var frames = st.GetFrames().AsEnumerable();
+            sb.AppendLine("--------StackTrace----------");
 
-        if (null != filter)
-        {
-            frames = frames?.Where(filter);
-        }
+            var frames = st.GetFrames().AsEnumerable();
 
-        frames?.Select(
-                frame => new
-                {
-                    FileName = frame.GetFileName(),
-                    LineNumber = frame.GetFileLineNumber(),
-                    ColumnNumber = frame.GetFileColumnNumber(),
-                    Method = frame.GetMethod(),
-                    Class = frame.GetMethod().DeclaringType
-                }
-            )
-            .ForEach(
-                info =>
-                {
-                    sb.AppendLine($"class:{info.Class?.FullName}");
-                    sb.AppendLine($"method:{info.Method?.Name}");
+            if (null != filter)
+            {
+                frames = frames?.Where(filter);
+            }
 
-                    // only print for our source
-                    if (!string.IsNullOrEmpty(info.FileName))
+            frames?.Select(frame => new
                     {
-                        sb.AppendLine($"file:{info.FileName}");
-                        sb.AppendLine($"line:{info.LineNumber}");
-                        sb.AppendLine($"column:{info.ColumnNumber}");
-                        sb.AppendLine("----------Next-----------");
+                        FileName = frame.GetFileName(),
+                        LineNumber = frame.GetFileLineNumber(),
+                        ColumnNumber = frame.GetFileColumnNumber(),
+                        Method = frame.GetMethod(),
+                        Class = frame.GetMethod().DeclaringType,
                     }
-                }
-            );
+                )
+                .ForEach(info =>
+                    {
+                        sb.AppendLine($"class:{info.Class?.FullName}");
+                        sb.AppendLine($"method:{info.Method?.Name}");
 
-        // wait to implement serializer
-        // sb.AppendLine("--------Data----------");
-        // sb.AppendLine(JsonConvert.SerializeObject(ex.Data));
+                        // only print for our source
+                        if (!string.IsNullOrEmpty(info.FileName))
+                        {
+                            sb.AppendLine($"file:{info.FileName}");
+                            sb.AppendLine($"line:{info.LineNumber}");
+                            sb.AppendLine($"column:{info.ColumnNumber}");
+                            sb.AppendLine("----------Next-----------");
+                        }
+                    }
+                );
 
-        return sb.ToString();
+            // wait to implement serializer
+            // sb.AppendLine("--------Data----------");
+            // sb.AppendLine(JsonConvert.SerializeObject(ex.Data));
+
+            return sb.ToString();
+        }
     }
 }

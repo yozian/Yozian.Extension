@@ -6,21 +6,22 @@ namespace Yozian.Extension;
 
 public static class IQueryableExtension
 {
-    public static IQueryable<T> WhereWhen<T>(
-        this IQueryable<T> query,
-        Func<bool> condition,
-        Expression<Func<T, bool>> predicate
-    )
+    extension<T>(IQueryable<T> @this)
     {
-        return condition() ? query.Where(predicate) : query;
-    }
+        public IQueryable<T> WhereWhen(
+            Func<bool> condition,
+            Expression<Func<T, bool>> predicate
+        )
+        {
+            return condition() ? @this.Where(predicate) : @this;
+        }
 
-    public static IQueryable<T> WhereWhen<T>(
-        this IQueryable<T> query,
-        bool condition,
-        Expression<Func<T, bool>> predicate
-    )
-    {
-        return condition ? query.Where(predicate) : query;
+        public IQueryable<T> WhereWhen(
+            bool condition,
+            Expression<Func<T, bool>> predicate
+        )
+        {
+            return condition ? @this.Where(predicate) : @this;
+        }
     }
 }

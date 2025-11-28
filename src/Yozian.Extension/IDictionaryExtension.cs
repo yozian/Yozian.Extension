@@ -6,54 +6,54 @@ namespace Yozian.Extension;
 
 public static class IDictionaryExtension
 {
-    public static TValue SafeGet<TKey, TValue>(
-        this IDictionary<TKey, TValue> @this,
-        TKey key
-    )
+    extension<TKey, TValue>(IDictionary<TKey, TValue> @this)
     {
-        if (@this.TryGetValue(key, out var value))
+        public TValue SafeGet(
+            TKey key
+        )
         {
-            return value;
-        }
+            if (@this.TryGetValue(key, out var value))
+            {
+                return value;
+            }
 
-        return default(TValue);
+            return default;
+        }
     }
 
     /// <summary>
     /// CAUTION: this method will reduce the performance for lots of keys, because it will iterate all the keys, not by the key
     /// </summary>
-    /// <param name="this"></param>
-    /// <param name="key"></param>
-    /// <param name="ignoreCase"></param>
-    /// <typeparam name="TValue"></typeparam>
-    /// <returns></returns>
-    public static TValue SafeGet<TValue>(
-        this IDictionary<string, TValue> @this,
-        string key,
-        bool ignoreCase
-    )
+    extension<TValue>(IDictionary<string, TValue> @this)
     {
-        var comparer = StringComparer.Create(CultureInfo.InvariantCulture, ignoreCase);
-
-        foreach (var kvp in @this)
+        public TValue SafeGet(
+            string key,
+            bool ignoreCase
+        )
         {
-            if (comparer.Equals(kvp.Key, key))
-            {
-                return kvp.Value;
-            }
-        }
+            var comparer = StringComparer.Create(CultureInfo.InvariantCulture, ignoreCase);
 
-        return default(TValue);
+            foreach (var kvp in @this)
+            {
+                if (comparer.Equals(kvp.Key, key))
+                {
+                    return kvp.Value;
+                }
+            }
+
+            return default;
+        }
     }
 
-    public static void MergeDictionary<TKey, TValue>(
-        this Dictionary<TKey, TValue> @this,
-        Dictionary<TKey, TValue> others
-    )
+    extension<TKey, TValue>(Dictionary<TKey, TValue> @this)
     {
-        others
-            .ForEach(
-                kv => { @this.TryAdd(kv.Key, kv.Value); }
-            );
+        public void MergeDictionary(
+            Dictionary<TKey, TValue> others
+        )
+        {
+            others
+                .ForEach(kv => { @this.TryAdd(kv.Key, kv.Value); }
+                );
+        }
     }
 }

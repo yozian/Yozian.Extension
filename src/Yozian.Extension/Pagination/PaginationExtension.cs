@@ -8,90 +8,98 @@ namespace Yozian.Extension.Pagination;
 
 public static class PaginationExtension
 {
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="this"></param>
-    /// <param name="page"></param>
-    /// <param name="size"></param>
     /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static Paging<T> ToPagination<T>(
-        this IQueryable<T> @this,
-        int? page,
-        int? size
-    )
+    extension<T>(IQueryable<T> @this)
     {
-        return new Paging<T>(@this, page, size);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="this"></param>
-    /// <param name="page"></param>
-    /// <param name="size"></param>
-    /// <param name="converter"></param>
-    /// <typeparam name="TSource"></typeparam>
-    /// <typeparam name="TOutput"></typeparam>
-    /// <returns></returns>
-    public static Paging<TOutput> ToPagination<TSource, TOutput>(
-        this IQueryable<TSource> @this,
-        int? page,
-        int? size,
-        Func<TSource, TOutput> converter
-    )
-    {
-        return new Paging<TSource>(@this, page, size).MapTo(converter);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="this"></param>
-    /// <param name="page"></param>
-    /// <param name="size"></param>
-    /// <param name="converter"></param>
-    /// <param name="cancellationToken"></param>
-    /// <typeparam name="TSource"></typeparam>
-    /// <typeparam name="TOutput"></typeparam>
-    /// <returns></returns>
-    public static Task<Paging<TOutput>> ToPaginationAsync<TSource, TOutput>(
-        this IQueryable<TSource> @this,
-        int? page,
-        int? size,
-        Func<TSource, TOutput> converter = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Task.Run(
-            () => ToPagination(
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public Paging<T> ToPagination(
+            int? page,
+            int? size
+        )
+        {
+            return new Paging<T>(
                 @this,
                 page,
-                size,
-                converter
-            ),
-            cancellationToken
-        );
-    }
+                size
+            );
+        }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="this"></param>
-    /// <param name="page"></param>
-    /// <param name="size"></param>
-    /// <param name="cancellationToken"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static Task<Paging<T>> ToPaginationAsync<T>(
-        this IQueryable<T> @this,
-        int? page,
-        int? size,
-        CancellationToken cancellationToken = default
-    )
-    {
-        return Task.Run(() => ToPagination(@this, page, size), cancellationToken);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <param name="converter"></param>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <returns></returns>
+        public Paging<TOutput> ToPagination<TOutput>(
+            int? page,
+            int? size,
+            Func<T, TOutput> converter
+        )
+        {
+            return new Paging<T>(
+                @this,
+                page,
+                size
+            ).MapTo(converter);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <param name="converter"></param>
+        /// <param name="cancellationToken"></param>
+        /// <typeparam name="TOutput"></typeparam>
+        /// <returns></returns>
+        public Task<Paging<TOutput>> ToPaginationAsync<TOutput>(
+            int? page,
+            int? size,
+            Func<T, TOutput> converter = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return Task.Run(
+                () => ToPagination(
+                    @this,
+                    page,
+                    size,
+                    converter
+                ),
+                cancellationToken
+            );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="size"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<Paging<T>> ToPaginationAsync(
+            int? page,
+            int? size,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return Task.Run(
+                () => ToPagination(
+                    @this,
+                    page,
+                    size
+                ),
+                cancellationToken
+            );
+        }
     }
 
 

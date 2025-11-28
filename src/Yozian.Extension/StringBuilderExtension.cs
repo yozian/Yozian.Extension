@@ -4,57 +4,57 @@ namespace Yozian.Extension;
 
 public static class StringBuilderExtension
 {
-    public static StringBuilder AppendWhen(this StringBuilder @this, bool matched, string text)
+    extension(StringBuilder @this)
     {
-        if (matched)
+        public StringBuilder AppendWhen(bool matched, string text)
         {
-            @this.Append(text);
+            if (matched)
+            {
+                @this.Append(text);
+            }
+
+            return @this;
         }
 
-        return @this;
-    }
-
-    public static StringBuilder AppendWhen(
-        this StringBuilder @this,
-        bool matched,
-        string text,
-        params string[] values
-    )
-    {
-        if (matched)
+        public StringBuilder AppendWhen(
+            bool matched,
+            string text,
+            params string[] values
+        )
         {
-            @this.Append(string.Format(text, values));
+            if (matched)
+            {
+                @this.Append(string.Format(text, values));
+            }
+
+            return @this;
         }
 
-        return @this;
-    }
-
-    public static StringBuilder AppendLineWhen(
-        this StringBuilder @this,
-        bool matched,
-        string text
-    )
-    {
-        if (matched)
+        public StringBuilder AppendLineWhen(
+            bool matched,
+            string text
+        )
         {
-            @this.AppendLine(text);
+            if (matched)
+            {
+                @this.AppendLine(text);
+            }
+
+            return @this;
         }
 
-        return @this;
-    }
-
-    public static StringBuilder AppendLineWhen(
-        this StringBuilder @this,
-        bool matched,
-        string text,
-        params string[] values
-    )
-    {
-        if (matched)
+        public StringBuilder AppendLineWhen(
+            bool matched,
+            string text,
+            params string[] values
+        )
         {
-            @this.AppendLine(string.Format(text, values));
-        }
+            if (matched)
+            {
+                @this.AppendLine(string.Format(text, values));
+            }
 
-        return @this;
+            return @this;
+        }
     }
 }

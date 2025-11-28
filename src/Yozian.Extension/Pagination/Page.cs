@@ -56,7 +56,12 @@ public class Page<T>
         );
     }
 
-    private void CalculateNavigation(int totalCount, int pageCount, int currentPage, int pageSize)
+    private void CalculateNavigation(
+        int totalCount,
+        int pageCount,
+        int currentPage,
+        int pageSize
+    )
     {
         var isTimesOfDisplayPagesCount = currentPage % pageSize == 0;
 
