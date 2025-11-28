@@ -1,220 +1,111 @@
-# Useful Extension methods
+## Yozian.Extension
 
-You could take a look into test project to get examples with following list!
+Yozian.Extension bundles reusable extension methods that target common .NET types (collections, LINQ, strings, diagnostics, pagination, etc.). The package targets .NET Standard 2.0 so it works with .NET Framework, .NET Core, and .NET 5+ apps.
 
-# Extension methods of Type
+## Install
 
-* [ExceptionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ExceptionExtensionTest.cs)
-
-    >DumpDetail
-
-* [ExpressionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ExpressionExtensionTest.cs)
-
-    >GetMemberName
-
-* [ICollectionExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ICollectionExtensionTest.cs)
-
-    >AddWhen
-
-    >RemoveWhen
-
-* [IDictionaryExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IDictionaryExtensionTest.cs)
-
-    >SafeGet
-
-* [IEnumerableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IEnumerableExtensionTest.cs)
-
-    >ForEach
-
-    >FlattenToString
-
-
-* [IQueryableExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//IQueryableExtensionTest.cs)
-
-    >WhereWhen
-
-* [ObjectExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//ObjectExtensionTest.cs)
-
-    >SafeToString
-
-    >ConvertAll
-
-    >ShallowClone
-
-* [StringExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//StringExtensionTest.cs)
-
-    >ToEnum
-
-    >LimitLength
-
-    >Repeat
-
-* [PaginationExtension](https://github.com/yozian/Yozian.Extension/blob/master/src/Yozian.Extension.Test//PaginationExtensionTest.cs)
-
-    >ToPagination
-
-    >ToPaginationAsync
-
-# Take IQueryable Extension method as example
-
-
-### conditional query where closure
-
-
-The example shows the extension method `WhereWhen` eliminate if statement block.
-
-The constrain applied only when the condition matched, so that you could achieve dynamic query easily!
-
-```csharp
-
-var books = await this.dbContext.Book
-                .Where(x => x.Name.Equals(request.Name))
-                .WhereWhen(
-                    !string.IsNullOrEmpty(request.Category),
-                    x => x.Category.Equals(request.Category)
-                )
-                .WhereWhen(
-                    request.PublishDate.HasValue,
-                    x => x.PublishDate.Equals(request.PublishDate)
-                )
-                .ToListAsync();
-
+```bash
+dotnet add package Yozian.Extension
 ```
 
+> See the `nuget/` folder or [NuGet.org](https://www.nuget.org/packages/Yozian.Extension) for published versions.
 
-for old school way, would have lots of if statement block
+## Highlights
+
+- Conditional LINQ filters with `WhereWhen` to drop `if` chains around `IQueryable` queries.
+- Server-friendly pagination with async helpers and navigation metadata (`Paging<T>` and `Page<T>`).
+- Productivity helpers for collections, dictionaries, producer/consumer queues, GUIDs, strings, and builders.
+- Diagnostics helpers such as exception dump formatting and expression member-name extraction.
+- Pure extension API surface—add the namespace once (`using Yozian.Extension;`) and keep your domain objects clean.
+
+## Extension Catalog
+
+| Target type | Notable members | Source / Tests |
+| --- | --- | --- |
+| `Exception` | `DumpDetail()` formats nested messages and filtered stack frames | `src/Yozian.Extension/ExceptionExtension.cs` · `src/Yozian.Extension.Test/ExceptionExtensionTest.cs` |
+| `LambdaExpression` | `GetMemberName()` resolves the underlying member/method | `src/Yozian.Extension/ExpressionExtension.cs` · `.../ExpressionExtensionTest.cs` |
+| `ICollection<T>` | `AddWhen`, `RemoveWhen`, `AddRange`, `DifferFrom()` diff reports | `src/Yozian.Extension/ICollectionExtension.cs` · `.../ICollectionExtensionTest.cs` |
+| `IDictionary<TKey,TValue>` | `SafeGet()` overloads, `MergeDictionary()` | `src/Yozian.Extension/IDictionaryExtension.cs` |
+| `IEnumerable<T>` | `ForEach`, `ForEachAsync`, `FlattenToString`, `BatchProcessAsync`, `LeftOuterJoin` | `src/Yozian.Extension/IEnumerableExtension.cs` · `.../IEnumerableExtensionTest.cs` |
+| `IProducerConsumerCollection<T>` | `BatchConsumeAsync()` dequeues in batches with backpressure | `src/Yozian.Extension/IProducerConsumerCollectionExtension.cs` |
+| `IQueryable<T>` | `WhereWhen(bool|Func<bool>)` conditional predicates | `src/Yozian.Extension/IQueryableExtension.cs` · `.../IQueryableExtensionTest.cs` |
+| `object`/`T` | `SafeToString`, `ConvertAll<TTarget>()`, `ShallowClone()` | `src/Yozian.Extension/ObjectExtension.cs` |
+| `string` | `ToEnum<T>()`, `LimitLength`, `Repeat`, Base64 encode/decode | `src/Yozian.Extension/StringExtension.cs` · `.../StringExtensionTest.cs` |
+| `StringBuilder` | `AppendWhen`, `AppendLineWhen` overloads | `src/Yozian.Extension/StringBuilderExtension.cs` |
+| `Guid` / `Guid?` | `IsEmpty`, `IsNullOrEmpty`, `Increment()` | `src/Yozian.Extension/GuidExtension.cs` |
+| `Version` | `IncreaseMajor/Minor/Build` helpers | `src/Yozian.Extension/VersionExtension.cs` |
+| `Enum` | `GetAttributeOf<TAttribute>()` | `src/Yozian.Extension/EnumExtension.cs` |
+| `IQueryable<T>` & pagination DTOs | `ToPagination`, `ToPaginationAsync`, `ToPage` navigation metadata | `src/Yozian.Extension/Pagination/*.cs` · `.../PaginationExtensionTest.cs` |
+
+The accompanying test project (`src/Yozian.Extension.Test`) demonstrates real-world scenarios for every extension.
+
+## Usage Highlights
+
+### Conditional LINQ Filters
 
 ```csharp
+var books = await dbContext.Book
+    .Where(x => x.Name == request.Name)
+    .WhereWhen(!string.IsNullOrEmpty(request.Category), x => x.Category == request.Category)
+    .WhereWhen(() => request.PublishDate.HasValue, x => x.PublishDate == request.PublishDate)
+    .ToListAsync(cancellationToken);
+```
 
-var query = this.dbContext.Book
-                .Where(x => x.Name.Equals(request.Name));
+`WhereWhen` keeps query composition readable—predicates run only when their boolean flag (or delegate) evaluates to `true`.
 
-if(!string.IsNullOrEmpty(request.Category)){
-    query = query.Where(x => x.Category.Equals(request.Category))
+### IQueryable Pagination & Navigation
+
+```csharp
+var paging = await dbContext.Book.AsQueryable()
+    .ToPaginationAsync(page: request.Page, size: request.Size, cancellationToken);
+
+Page<Book> page = paging.ToPage(navigatorPageSize: 5);
+
+if (page.HasNextPages)
+{
+    // use page.NavigationPages / NextStartPageNo for UI
 }
-
-if(request.PublishDate.HasValue){
-    query = query.Where(x => x.PublishDate.Equals(request.PublishDate))
-}
-
-var books = await query.ToListAsync();
-
-
 ```
 
+- `Paging<T>` captures `TotalCount`, `PageCount`, `Size`, and the materialized page records.
+- `ToPage(int navigatorPageSize)` computes navigation metadata (previous/next page groups, page links, etc.).
+- Need mapping? call `paging.MapTo(dto => new BookDto(dto))` before returning to clients.
 
-### IQueryable Pagination
-
- * An Extension method for IQueryable<T> interface
- * Could apply on EntityFramework DbSet<T> query (Any implementation of IQueryable<T>)
+### Collection & Queue Helpers
 
 ```csharp
+var diff = sourceProducts.DifferFrom(targetProducts, (a, b) => a.Id == b.Id);
 
-        var count = 10;
-        var size = 3;
-        var source = Enumerable
-            .Range(1, count)
-            .AsQueryable();
+await backlog.BatchProcessAsync(
+    batchSize: 100,
+    async (items, token) => await SendBatchAsync(items, token),
+    cancellationToken);
 
-        Pageable<int> result = source.ToPagination(1, size);
-
-        // Async 
-        Pageable<int> result = await source.ToPaginationAsync(1, size);
+await queue.BatchConsumeAsync(
+    batchSize: 50,
+    async (items, token) => await PersistAsync(items, token),
+    cancellationToken);
 ```
 
+- `DifferFrom` returns matches plus missing items on either side (see `Dtos/CollectionDifference.cs`).
+- `BatchProcessAsync` iterates an `IEnumerable<T>` in batches without loading the whole set into memory.
+- `BatchConsumeAsync` works with `IProducerConsumerCollection<T>` (e.g., `ConcurrentQueue<T>`) and drains items safely.
 
-Apply converter 
+### Diagnostics & Conversion Helpers
 
-```csharp
+- `DumpDetail()` renders nested exception messages plus per-frame file/line info with an optional filter.
+- `GetMemberName()` resolves the member string from expression trees—handy for guard clauses and refactor-safe logging.
+- `SafeToString()`, `ConvertAll<TTarget>()`, and `ShallowClone()` simplify object formatting and property transforms.
+- `StringExtension` adds Base64 encode/decode, length limiting, `Repeat`, and safe `Enum` parsing with optional fallback.
+- `Guid` and `Version` helpers cover common checks (`IsNullOrEmpty`, `IsEmpty`) and incremental versioning.
 
-        var count = 10;
-        var size = 3;
-        var source = Enumerable
-            .Range(1, count)
-            .AsQueryable();
+## Samples & Tests
 
-        Pageable<int, string> result = source.ToPagination(1, size, x => x.ToString());
+- Explore `src/Yozian.Extension.Test` for runnable examples of every API.
+- The test project is referenced throughout this README so you can jump directly to scenarios you care about.
 
-        // Async 
-        Pageable<int, string> result = await source.ToPaginationAsync(1, size, x => x.ToString());
-```
-
-
-Fetch next page for the same queryable source
-
-```csharp
-
-        var count = 10;
-        var size = 3;
-        var source = Enumerable
-            .Range(1, count)
-            .AsQueryable();
-
-        Pageable<int, string> result = source.ToPagination(1, size, x => x.ToString());
-
-        do
-        {
-            // process records here
-            result.Records.ForEach(it =>
-            {
-                // do somthing
-
-            });
-
-            result.FetchNextPage();
-
-        }
-        while (result.HasNextPage);
-      
-```
+> Contributions and new extension ideas are welcome—please file an issue or open a PR!
 
 
-Fetch next page for the same queryable source
-
-```csharp
-
-        var count = 32;
-        var size = 3;
-        var source = Enumerable
-            .Range(1, count)
-            .AsQueryable();
-        var currentPage = 3;
-
-        var result = source.ToPagination(currentPage, size);
-
-        var pageSize = 5;
-
-        // converte to Page<T>, including navigation info.
-        Page<int> page = result.ToPage(pageSize);
-    
-        // also provide tranform method to map records
-        Page<string> page = result.ToPage(pageSize, x => x.ToString());
-
-
-        // dump Page<int> 
-        {
-          "TotalCount": 32,
-          "PageCount": 11,
-          "CurrentPage": 3,
-          "Size": 3,
-          "Records": [
-            7,
-            8,
-            9
-          ],
-          "PageSize": 5,
-          "HasPreviosPages": false,
-          "HasNextPages": true,
-          "PreviosLastPageNo": 1,
-          "NextStartPageNo": 6,
-          "NavigationPages": [
-            1,
-            2,
-            3,
-            4,
-            5
-          ]
-        }      
-```
 
 
