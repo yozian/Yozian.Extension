@@ -57,6 +57,13 @@ public class StringBuilderExtensionTest
             "b"
         );
 
-        Assert.AreEqual(string.Format(template, "a", "b"), sb.ToString());
+        Assert.AreEqual(
+            string.Format(
+                template,
+                "a",
+                "b"
+            ),
+            sb.ToString()
+        );
     }
 }

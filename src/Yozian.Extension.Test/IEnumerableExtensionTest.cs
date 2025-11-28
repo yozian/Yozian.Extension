@@ -19,8 +19,7 @@ public class IEnumerableExtensionTest
     {
         var list = Enumerable.Range(1, 5);
 
-        list.ForEach(
-            x =>
+        list.ForEach(x =>
             {
                 Console.Write(x);
             }
@@ -35,8 +34,7 @@ public class IEnumerableExtensionTest
     {
         var list = Enumerable.Range(1, 5);
 
-        list.ForEach(
-            (x, index) =>
+        list.ForEach((x, index) =>
             {
                 Console.Write($"{x}({index})");
             }
@@ -141,21 +139,19 @@ public class IEnumerableExtensionTest
     public void Test_ExceptLambadaCompare()
     {
         var source = Enumerable.Range(1, 10)
-            .Select(
-                x => new Person
+            .Select(x => new Person
                 {
                     Name = x.ToString(),
-                    Age = 1
+                    Age = 1,
                 }
             )
             .ToList();
 
         var targets = Enumerable.Range(6, 10)
-            .Select(
-                x => new Person
+            .Select(x => new Person
                 {
                     Name = x.ToString(),
-                    Age = 1
+                    Age = 1,
                 }
             );
 

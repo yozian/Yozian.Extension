@@ -14,7 +14,7 @@ public class IDictionaryExtensionTest
         {
             {
                 "Key", "val"
-            }
+            },
         };
     }
 
@@ -61,7 +61,7 @@ public class IDictionaryExtensionTest
             },
             {
                 "key2", "val2"
-            }
+            },
         };
 
         var hash2 = new Dictionary<string, string>
@@ -71,7 +71,7 @@ public class IDictionaryExtensionTest
             },
             {
                 "key3", "val3"
-            }
+            },
         };
 
         hash1.MergeDictionary(hash2);

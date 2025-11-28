@@ -24,7 +24,7 @@ public class ObjectExtensionTest
     {
         var man = new Person
         {
-            Name = "Yozian  "
+            Name = "Yozian  ",
         };
 
         man.ConvertAll((string p) => p.Trim());
@@ -38,7 +38,7 @@ public class ObjectExtensionTest
     {
         var man = new Person
         {
-            Name = "Yozian"
+            Name = "Yozian",
         };
 
         var cloneMan = man.ShallowClone();

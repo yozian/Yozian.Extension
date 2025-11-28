@@ -24,15 +24,13 @@ public class CreateMethodMapTool
 
         type.Assembly
             .ExportedTypes
-            .Where(
-                et => et.Attributes
-                      == (TypeAttributes.Public
-                          | TypeAttributes.Abstract
-                          | TypeAttributes.Sealed
-                          | TypeAttributes.BeforeFieldInit)
+            .Where(et => et.Attributes
+                         == (TypeAttributes.Public
+                             | TypeAttributes.Abstract
+                             | TypeAttributes.Sealed
+                             | TypeAttributes.BeforeFieldInit)
             )
-            .ForEach(
-                t =>
+            .ForEach(t =>
                 {
                     Console.WriteLine($"* [{t.Name}]({testProjectUrl}/{t.Name}Test.cs)");
                     Console.WriteLine("");
@@ -40,8 +38,7 @@ public class CreateMethodMapTool
                     t.GetMethods()
                         .Where(m => m.DeclaringType == t)
                         .DistinctBy(m => m.Name)
-                        .ForEach(
-                            m =>
+                        .ForEach(m =>
                             {
                                 Console.WriteLine($"    >{m.Name}");
                                 Console.WriteLine("");

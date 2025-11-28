@@ -20,7 +20,7 @@ public class ICollectionExtensionTest
         {
             1,
             2,
-            3
+            3,
         };
 
         collection.AddWhen(false, 4);
@@ -39,7 +39,7 @@ public class ICollectionExtensionTest
         {
             1,
             2,
-            3
+            3,
         };
 
         collection.RemoveWhen(false, 1);
@@ -82,22 +82,20 @@ public class ICollectionExtensionTest
     {
         var sourceA = Enumerable
             .Range(1, 7)
-            .Select(
-                i => new Book
+            .Select(i => new Book
                 {
                     Id = i,
-                    Name = i.ToString()
+                    Name = i.ToString(),
                 }
             )
             .ToList();
 
         var sourceB = Enumerable
             .Range(1, 5)
-            .Select(
-                i => new Book
+            .Select(i => new Book
                 {
                     Id = i,
-                    Name = i.ToString()
+                    Name = i.ToString(),
                 }
             )
             .ToList();
@@ -123,7 +121,7 @@ public class ICollectionExtensionTest
             2,
             3,
             4,
-            5
+            5,
         };
 
         var listB = new List<int>
@@ -132,7 +130,7 @@ public class ICollectionExtensionTest
             5,
             6,
             7,
-            8
+            8,
         };
 
         var differResult = listA.DifferFrom(listB, new GenericComparer<int>((a, b) => a == b));
@@ -149,22 +147,20 @@ public class ICollectionExtensionTest
     {
         var listA = Enumerable
             .Range(1, 5)
-            .Select(
-                i => new Book
+            .Select(i => new Book
                 {
                     Id = i,
-                    Name = $"Book {i}"
+                    Name = $"Book {i}",
                 }
             )
             .ToList();
 
         var listB = Enumerable
             .Range(4, 5)
-            .Select(
-                i => new Book
+            .Select(i => new Book
                 {
                     Id = i,
-                    Name = $"Book {i}"
+                    Name = $"Book {i}",
                 }
             )
             .ToList();
@@ -189,18 +185,18 @@ public class ICollectionExtensionTest
             new Book
             {
                 Id = 1,
-                Name = "Book 1"
+                Name = "Book 1",
             },
             new Book
             {
                 Id = 2,
-                Name = "Book 2"
+                Name = "Book 2",
             },
             new Book
             {
                 Id = 3,
-                Name = "Book 3"
-            }
+                Name = "Book 3",
+            },
         };
 
         var listB = new List<Book>
@@ -208,18 +204,18 @@ public class ICollectionExtensionTest
             new Book
             {
                 Id = 2,
-                Name = "Book 2"
+                Name = "Book 2",
             },
             new Book
             {
                 Id = 3,
-                Name = "Book 3"
+                Name = "Book 3",
             },
             new Book
             {
                 Id = 4,
-                Name = "Book 4"
-            }
+                Name = "Book 4",
+            },
         };
 
         var composite = listA.LeftOuterJoin(
@@ -229,7 +225,7 @@ public class ICollectionExtensionTest
             (a, b) => new
             {
                 A = a,
-                B = b
+                B = b,
             }
         );
 

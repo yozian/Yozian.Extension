@@ -40,7 +40,7 @@ public class GuidExtensionTest
         var guid = Guid.NewGuid();
 
         // increment 1000 times, make it sure it won't overflow
-        for (int i = 0; i < 1000; i++)
+        for (var i = 0; i < 1000; i++)
         {
             var incrementedGuid = guid.Increment();
 

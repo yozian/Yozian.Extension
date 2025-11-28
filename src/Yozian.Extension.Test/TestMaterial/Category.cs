@@ -5,5 +5,5 @@ internal enum Category
     Car,
     Train,
     AirCraft,
-    Ship
+    Ship,
 }

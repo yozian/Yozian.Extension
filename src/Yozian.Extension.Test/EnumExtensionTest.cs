@@ -14,7 +14,7 @@ public class EnumExtensionTest
     public enum TestEnum
     {
         [ActualName(Name = "Secrete")]
-        SpiderMan
+        SpiderMan,
     }
 
 

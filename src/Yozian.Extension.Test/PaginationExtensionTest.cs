@@ -19,10 +19,9 @@ public class PaginationExtensionTest
         var dbContext = new SouthSeaDbContext();
 
         var books = Enumerable.Range(1, totalBooksCount)
-            .Select(
-                x => new Book
+            .Select(x => new Book
                 {
-                    Name = x.ToString()
+                    Name = x.ToString(),
                 }
             );
 
@@ -210,7 +209,11 @@ public class PaginationExtensionTest
             .Range(1, count)
             .AsQueryable();
 
-        var result = source.ToPagination(1, size, x => x.ToString());
+        var result = source.ToPagination(
+            1,
+            size,
+            x => x.ToString()
+        );
 
         Assert.AreEqual(count, result.TotalCount);
         Assert.AreEqual(size, result.Records.Count());
