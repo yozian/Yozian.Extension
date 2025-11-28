@@ -180,13 +180,28 @@ public static class IEnumerableExtension
         }
 
 
+        [Obsolete("Use BatchProcessAsync instead, this method will be removed in future versions.")]
+        public async Task<int> BatchConsumeAsync(
+                          int batchSize,
+                          Func<List<T>, CancellationToken, Task> consumer,
+                          CancellationToken cancellationToken = default
+                      )
+        {
+            return await IEnumerableExtension.BatchProcessAsync(
+                @this,
+                batchSize,
+                consumer,
+                cancellationToken
+            );
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="batchSize">take out max amount each batch</param>
         /// <param name="consumer"></param>
         /// <returns></returns>
-        public async Task<int> BatchConsumeAsync(
+        public async Task<int> BatchProcessAsync(
             int batchSize,
             Func<List<T>, CancellationToken, Task> consumer,
             CancellationToken cancellationToken = default

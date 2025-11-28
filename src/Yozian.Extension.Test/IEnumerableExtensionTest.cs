@@ -327,12 +327,12 @@ public class IEnumerableExtensionTest
     }
 
     [Test]
-    public async Task Test_BatchConsumeAsync()
+    public async Task Test_BatchProcessAsync()
     {
         var source = Enumerable.Range(1, 5);
         var batches = new List<List<int>>();
 
-        var total = await source.BatchConsumeAsync(
+        var total = await source.BatchProcessAsync(
             2,
             async (items, token) =>
             {
@@ -354,30 +354,30 @@ public class IEnumerableExtensionTest
     }
 
     [Test]
-    public void Test_BatchConsumeAsync_InvalidBatchSize()
+    public void Test_BatchProcessAsync_InvalidBatchSize()
     {
         Assert.ThrowsAsync<ArgumentException>(async () =>
             await Enumerable.Range(1, 5)
-                .BatchConsumeAsync(0, (items, token) => Task.CompletedTask)
+                .BatchProcessAsync(0, (items, token) => Task.CompletedTask)
         );
     }
 
     [Test]
-    public void Test_BatchConsumeAsync_NullConsumer()
+    public void Test_BatchProcessAsync_NullConsumer()
     {
         Assert.ThrowsAsync<ArgumentNullException>(async () =>
             await Enumerable.Range(1, 5)
-                .BatchConsumeAsync(2, null)
+                .BatchProcessAsync(2, null)
         );
     }
 
     [Test]
-    public void Test_BatchConsumeAsync_SourceIsProducerConsumerCollection()
+    public void Test_BatchProcessAsync_SourceIsProducerConsumerCollection()
     {
         var queue = new ConcurrentQueue<int>(Enumerable.Range(1, 3));
 
         Assert.ThrowsAsync<ArgumentException>(async () =>
-            await (queue as IEnumerable<int>).BatchConsumeAsync(2, (items, token) => Task.CompletedTask)
+            await (queue as IEnumerable<int>).BatchProcessAsync(2, (items, token) => Task.CompletedTask)
         );
     }
 
