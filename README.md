@@ -1,4 +1,4 @@
-## Yozian.Extension
+﻿## Yozian.Extension
 
 Yozian.Extension bundles reusable extension methods that target common .NET types (collections, LINQ, strings, diagnostics, pagination, etc.). The package targets .NET Standard 2.0 so it works with .NET Framework, .NET Core, and .NET 5+ apps.
 
@@ -105,6 +105,10 @@ await queue.BatchConsumeAsync(
 - The test project is referenced throughout this README so you can jump directly to scenarios you care about.
 
 > Contributions and new extension ideas are welcome—please file an issue or open a PR!
+
+## License
+
+MIT. See the `LICENSE` file for details.
 
 
 
