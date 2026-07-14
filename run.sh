@@ -88,12 +88,24 @@ run_build() {
    find nuget/lib/netstandard2.0/ -type f ! -name "$PROJECT_NAME*" -exec rm -f {} +
 }
 
+validate_version() {
+   local version="$1"
+   local version_pattern='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
+
+   if [[ ! "$version" =~ $version_pattern ]]; then
+      echo "version '$version' is invalid. Use semantic version format like 2.6.7, 2.6.7-preview.1, or 2.6.7-preview.1+build.5."
+      exit 1
+   fi
+}
+
 run_pack() {
    local version="${1:-}"
    if [ -z "$version" ]; then
       echo "version should be provided!"
       exit 1
    fi
+
+   validate_version "$version"
 
    local commit
    commit=$(git rev-parse --short HEAD)
@@ -144,6 +156,8 @@ run_publish() {
       echo "version should be provided!"
       exit 1
    fi
+
+   validate_version "$version"
 
    local current_branch
    current_branch=$(git branch --show-current)
