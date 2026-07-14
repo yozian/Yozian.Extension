@@ -17,6 +17,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: nuget
     permissions:
       contents: read
       id-token: write
@@ -67,9 +68,11 @@ jobs:
           set -euo pipefail
 
           if [[ -z "$NUGET_USERNAME" ]]; then
-            echo "::error::Set the repository variable NUGET_USERNAME to your nuget.org profile name before publishing."
+            echo "::error::NuGet username is empty. Set repository variable NUGET_USERNAME to your nuget.org profile name before publishing."
             exit 1
           fi
+
+          echo "Using NuGet username: $NUGET_USERNAME"
 
       - name: Restore
         run: dotnet restore "$TEST_PATH"
