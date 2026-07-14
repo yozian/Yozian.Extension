@@ -1,0 +1,99 @@
+﻿name: publish-nuget
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: NuGet package version to publish
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PROJECT_PATH: src/Yozian.Extension/Yozian.Extension.csproj
+      TEST_PATH: src/Yozian.Extension.Test/Yozian.Extension.Test.csproj
+      ARTIFACTS_DIR: artifacts
+      NUGET_SOURCE: https://api.nuget.org/v3/index.json
+      NUGET_USERNAME: ${{ vars.NUGET_USERNAME }}
+      INPUT_VERSION: ${{ github.event.inputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Resolve package version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="$INPUT_VERSION"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            version="${GITHUB_REF_NAME#v}"
+          fi
+
+          if [[ -z "$version" ]]; then
+            echo "::error::No package version was provided. Use workflow_dispatch input 'version' or push a tag like v2.6.7."
+            exit 1
+          fi
+
+          echo "Resolved package version: $version"
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Validate NuGet username variable
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$NUGET_USERNAME" ]]; then
+            echo "::error::Set the repository variable NUGET_USERNAME to your nuget.org profile name before publishing."
+            exit 1
+          fi
+
+      - name: Restore
+        run: dotnet restore "$TEST_PATH"
+
+      - name: Test
+        run: dotnet test "$TEST_PATH" -c Release --no-restore
+
+      - name: Pack
+        run: dotnet pack "$PROJECT_PATH" -c Release --no-restore -p:PackageVersion="${{ steps.version.outputs.value }}" -p:ContinuousIntegrationBuild=true -o "$ARTIFACTS_DIR"
+
+      - name: List artifacts
+        run: ls -1 "$ARTIFACTS_DIR"
+
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USERNAME }}
+
+      - name: Push package and symbols
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          dotnet nuget push "$ARTIFACTS_DIR"/*.nupkg \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source "$NUGET_SOURCE" \
+            --skip-duplicate
+
+          dotnet nuget push "$ARTIFACTS_DIR"/*.snupkg \
+            --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+            --source "$NUGET_SOURCE" \
+            --skip-duplicate
