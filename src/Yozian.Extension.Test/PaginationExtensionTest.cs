@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Yozian.Extension.Pagination;
 using Yozian.Extension.Test.Data;
@@ -65,7 +65,7 @@ public class PaginationExtensionTest
 
         var page = result.ToPage(pageSize);
 
-        Console.WriteLine(JsonConvert.SerializeObject(page));
+        Console.WriteLine(JsonSerializer.Serialize(page));
 
         Assert.AreEqual(count, page.TotalCount);
         Assert.AreEqual(size, page.Records.Count());
